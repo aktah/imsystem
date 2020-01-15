@@ -157,14 +157,14 @@ img::-moz-selection {
     transition: all 0.3s;
   }
   #mainNav .navbar-nav .nav-item .nav-link {
-    padding: 1.1em 1em !important;
+    padding: 0 1em !important;
   }
-  #mainNav.navbar-shrink {
+  #mainNav {
     padding-top: 0;
     padding-bottom: 0;
     background-color: #212529;
   }
-  #mainNav.navbar-shrink .navbar-brand {
+  #mainNav .navbar-brand {
     font-size: 1.25em;
     padding: 12px 0;
   }
