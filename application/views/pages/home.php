@@ -1,6 +1,6 @@
 <div class="my-5">
     <div class="form-group">
-        <h5>การประกาศ</h5>
+        <h5>ข่าวประชาสัมพันธ์</h5>
         <div class="row">
             <div class="card m-2" style="width: 22rem;">
                 <a class="card-block stretched-link text-decoration-none" href="#">

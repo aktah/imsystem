@@ -2,6 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 // หน้าแรก
+$route['imsystem'] = 'imsystem/index';
+
+// หน้าแรก
 $route['default_controller'] = 'pages/view';
 
 $route['(:any)'] = 'pages/view/$1';

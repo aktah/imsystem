@@ -31,6 +31,15 @@
         <h4 class="service-heading">การตรวจวิเคราะห์</h4>
         <p class="text-muted">ให้บริการตรวจวิเคราะห์ ทดสอบ ผลิตชีววัตถุ และบริการวิชาการและวิชาชีพแก่บุคคลและหน่วยงานทั้งภายในและภายนอกมหาวิทยาลัย</p>
       </div>
+
+      <div class="col-md-12 mt-5">
+        <h2 class="service-heading">ขั้นตอนการใช้บริการ</h2>
+        <button class="btn btn-info">เข้าใช้ระบบ IM System</button>
+        <p>
+          <small>คู่มือการใช้งาน</small>
+        </p>
+      </div>
+
     </div>
   </div>
 </div>
