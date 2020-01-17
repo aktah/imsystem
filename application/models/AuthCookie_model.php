@@ -1,7 +1,6 @@
 <?php
 	class AuthCookie_model extends CI_Model{
-		public function __construct(){
-
+		public function isLoggedIn() {
             // วันที่ปัจจุบัน
             $current_time = time();
             $current_date = date("Y-m-d H:i:s", $current_time);
@@ -9,8 +8,8 @@
             // ตั้งวันหมดอายุไว้ 1 เดือน
             $cookie_expiration_time = $current_time + (30 * 24 * 60 * 60);
 
-            if ($this->session->userdata('member_id') === NULL) {
-                redirect('imsystem/login');
+            if ($this->session->userdata('member_id') !== NULL) {
+                return true;
             }
             else if (get_cookie("member_login") !== NULL && get_cookie("random_password") !== NULL && get_cookie("random_selector") !== NULL) {
 
@@ -33,16 +32,15 @@
                 }
                 
                 if (!empty($userToken["id"]) && $isPasswordVerified && $isSelectorVerified && $isExpiryDareVerified) {
-                    redirect('imsystem');
+                    return true;
                 } else {
                     if(!empty($userToken["id"])) {
                         $this->auth_model->markAsExpired($userToken["id"]);
                     }
                     $this->util_model->clearAuthCookie();
-
-                    redirect('imsystem/login');
                 }
             }
+            return false;
 		}
 
 		
