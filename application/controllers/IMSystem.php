@@ -98,7 +98,7 @@
 						$expiry_date = date("Y-m-d H:i:s", $cookie_expiration_time);
 						
 						// mark existing token as expired
-						$userToken = $this->auth_model->getTokenByUsername($username, 0);
+						$userToken = $this->auth_model->getTokenByUsername($username, false);
 						if (! empty($userToken["id"])) {
 							$this->auth_model->markAsExpired($userToken["id"]);
 						}

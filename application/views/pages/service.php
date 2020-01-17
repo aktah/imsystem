@@ -33,8 +33,8 @@
       </div>
 
       <div class="col-md-12 mt-5">
-        <h2 class="service-heading">ขั้นตอนการใช้บริการ</h2>
-        <button class="btn btn-info">เข้าใช้ระบบ IM System</button>
+        <h2 class="service-heading">ระบบบริการจัดการเครื่องมือเพื่อใช้ในงานวิจัย</h2>
+        <a href="<?php echo base_url();?>imsystem" class="btn btn-info">เข้าใช้ระบบ IM System</a>
         <p>
           <small>คู่มือการใช้งาน</small>
         </p>
