@@ -50,4 +50,11 @@
             
             return $this->db->insert('members', $data);
         }
+
+        public function hasPermission($flags, $value) {
+            if (($flags & $value) == $value) {
+                return true;
+            }
+            return false;
+        }
 	}

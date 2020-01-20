@@ -12,31 +12,30 @@
 		
 		public function index(){
 			$username = $this->auth_model->getMemberByID($this->session->userdata('member_id'))["member_name"];
-
-			$header['username'] = $username;
+			
 			$data['username'] = $username;
 
-			$this->load->view('imsystem/templates/header', $header);
-			$this->load->view('imsystem/pages/index', $data);
-			$this->load->view('imsystem/templates/footer');
+			$this->load->view('templates/header');
+			$this->load->view('pages/index', $data);
+			$this->load->view('templates/footer');
 		}
 
 		public function login() {
 			if ($this->authCookie_model->isLoggedIn()) {
                 redirect('imsystem');
             }
-			$this->load->view('imsystem/templates/auth/header');
-			$this->load->view('imsystem/pages/login');
-			$this->load->view('imsystem/templates/auth/footer');
+			$this->load->view('templates/auth/header');
+			$this->load->view('pages/login');
+			$this->load->view('templates/auth/footer');
 		}
 
 		public function register(){
 			if ($this->authCookie_model->isLoggedIn()) {
                 redirect('imsystem');
             }
-			$this->load->view('imsystem/templates/auth/header');
-			$this->load->view('imsystem/pages/register');
-			$this->load->view('imsystem/templates/auth/footer');
+			$this->load->view('templates/auth/header');
+			$this->load->view('pages/register');
+			$this->load->view('templates/auth/footer');
 		}
 
 		public function frmLogin(){
@@ -49,9 +48,9 @@
 			$this->form_validation->set_rules('password', 'รหัสผ่าน', 'required');
 
 			if($this->form_validation->run() === FALSE){
-				$this->load->view('imsystem/templates/auth/header');
-				$this->load->view('imsystem/pages/register');
-				$this->load->view('imsystem/templates/auth/footer');
+				$this->load->view('templates/auth/header');
+				$this->load->view('pages/register');
+				$this->load->view('templates/auth/footer');
 			} else {
 				$isAuthenticated = false;
     
@@ -127,9 +126,9 @@
 			$this->form_validation->set_rules('password', 'รหัสผ่าน', 'required');
 
 			if($this->form_validation->run() === FALSE){
-				$this->load->view('imsystem/templates/auth/header');
-				$this->load->view('imsystem/pages/register');
-				$this->load->view('imsystem/templates/auth/footer');
+				$this->load->view('templates/auth/header');
+				$this->load->view('pages/register');
+				$this->load->view('templates/auth/footer');
 			} else {
 				if ($this->auth_model->member_register($this->input->post('email'), $this->input->post('username'), $this->input->post('password'))) {
 					$this->session->set_flashdata('message', "สมัครสมาชิกเสร็จสมบูรณ์แล้ว!");

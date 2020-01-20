@@ -1,31 +1,62 @@
-  
     </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- End of Main Content -->
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; IM System 2019</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
   </div>
-  
-    <!-- Footer -->
-   <footer class="footer">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-12 text-center">
-          <span class="copyright">Copyright &copy; IM-System 2019</span>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">คุณแน่ใจหรือว่าต้องการออกจากระบบ?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">เลือก "ออกจากระบบ" ด้านล่างหากคุณพร้อมที่จะจบเซสชั่นในปัจจุบันของคุณ</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
+          <a class="btn btn-primary" href="<?php echo base_url();?>imsystem/logout">ออกจากระบบ</a>
         </div>
       </div>
     </div>
-  </footer>
+  </div>
 
-  <!-- Bootstrap core JavaScript -->
+  <!-- Bootstrap core JavaScript-->
   <script src="<?php echo base_url(); ?>assets/vendor/jquery/jquery.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Plugin JavaScript -->
+  <!-- Core plugin JavaScript-->
   <script src="<?php echo base_url(); ?>assets/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <!-- Contact form JavaScript -->
-  <script src="<?php echo base_url(); ?>assets/js/jqBootstrapValidation.js"></script>
+  <!-- Custom scripts for all pages-->
+  <script src="<?php echo base_url(); ?>assets/js/sb-admin-2.min.js"></script>
 
-  <!-- Custom scripts for this template -->
-  <script src="<?php echo base_url(); ?>assets/js/agency.js"></script>
-  <script src="<?php echo base_url(); ?>assets/js/custom.js"></script>
+    <!-- Page level plugins -->
+  <script src="<?php echo base_url(); ?>assets/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/datatables/datatables-custom.js"></script>
 
 </body>
 
