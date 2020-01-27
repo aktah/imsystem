@@ -1,0 +1,32 @@
+.dropdown-hover.dropdown-menu > a:hover, .dropdown-hover.dropdown-menu > a:focus {
+    background-image:none !important;
+}
+.dropdown-hover.dropdown-menu > a:hover, .dropdown-hover.dropdown-menu > a:focus {
+    background-color: #4e73df;
+    color: white;
+}
+
+.dropdown-hover.dropdown-menu > a:hover.dropdown-item.item-danger, .dropdown-hover.dropdown-menu > a:focus.dropdown-item.item-danger {
+    background-color: #df4e4e;
+    color: white;
+}
+
+.dropdown-hover.dropdown-menu > a:hover.dropdown-item.item-success, .dropdown-hover.dropdown-menu > a:focus.dropdown-item.item-success {
+    background-color: #5adf4e;
+    color: white;
+}
+
+.dropdown-hover.dropdown-menu > a:hover.dropdown-item.item-warning, .dropdown-hover.dropdown-menu > a:focus.dropdown-item.item-warning {
+    background-color: #dfc94e;
+    color: white;
+}
+
+.dropdown-hover.dropdown-menu > a:hover.dropdown-item.item-info, .dropdown-hover.dropdown-menu > a:focus.dropdown-item.item-info {
+    background-color: #4ec9df;
+    color: white;
+}
+
+.dropdown-hover.dropdown-menu > a:hover.dropdown-item.item-primary, .dropdown-hover.dropdown-menu > a:focus.dropdown-item.item-primary {
+    background-color: #4e73df;
+    color: white;
+}
