@@ -68,34 +68,22 @@
 
 					if ($this->input->post('remember') !== NULL) {
 
-				   		set_cookie(array(
-							'name'   => 'member_login',
-							'value'  => $username,                            
-							'expire' => $cookie_expiration_time,                                                                                   
-							'secure' => TRUE
-						));   
+						$current_time = time();
+						$cookie_expiration_time = $current_time + (30 * 24 * 60 * 60);	
+					
+				   		set_cookie('member_login', $username,  $cookie_expiration_time);   
 
 						$random_password = $this->util_model->getToken(16);
-						set_cookie(array(
-							'name'   => 'random_password',
-							'value'  => $random_password,                            
-							'expire' => $cookie_expiration_time,                                                                                   
-							'secure' => TRUE
-						));
+						set_cookie('random_password', $random_password, $cookie_expiration_time);
 
 						$random_selector =$this->util_model->getToken(32);
-						set_cookie(array(
-							'name'   => 'random_selector',
-							'value'  => $random_selector,                            
-							'expire' => $cookie_expiration_time,                                                                                   
-							'secure' => TRUE
-						));
+						set_cookie('random_selector', $random_selector, $cookie_expiration_time);
 
 						$random_password_hash = password_hash($random_password, PASSWORD_DEFAULT);
 						$random_selector_hash = password_hash($random_selector, PASSWORD_DEFAULT);
 						
 						$expiry_date = date("Y-m-d H:i:s", $cookie_expiration_time);
-						
+
 						// mark existing token as expired
 						$userToken = $this->auth_model->getTokenByUsername($username, false);
 						if (! empty($userToken["id"])) {
@@ -106,7 +94,7 @@
 					} else {
 						$this->util_model->clearAuthCookie();
 					}
-					redirect("imsystem");
+					redirect();
 				} else {
 					$this->session->set_flashdata('message', "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!");
 					$this->session->set_flashdata('type', "danger");
