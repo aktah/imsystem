@@ -45,6 +45,7 @@
 
   <!-- Bootstrap core JavaScript-->
   <script src="<?php echo base_url(); ?>assets/vendor/jquery/jquery.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/vendor/jquery-ui/jquery-ui.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Core plugin JavaScript-->
@@ -58,6 +59,17 @@
   <script src="<?php echo base_url(); ?>assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/datatables/datatables-custom.js"></script>
 
+  <script src='<?php echo base_url(); ?>assets/vendor/fullcalendar/core/main.js'></script>
+  <script src='<?php echo base_url(); ?>assets/vendor/fullcalendar/interaction/main.js'></script>
+  <script src='<?php echo base_url(); ?>assets/vendor/fullcalendar/daygrid/main.js'></script>
+  <script src='<?php echo base_url(); ?>assets/vendor/fullcalendar/timegrid/main.js'></script>
+  <script src='<?php echo base_url(); ?>assets/vendor/fullcalendar/core/locales/th.js'></script>
+
+  <!-- Sweet Alert 2 -->  
+  <script src="<?php echo base_url(); ?>assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+
+  <script src="<?php echo base_url(); ?>assets/js/custom.js"></script>
+  
 </body>
 
 </html>

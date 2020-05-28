@@ -5,7 +5,7 @@
           <div class="col-lg-7">
             <div class="p-5">
               <div class="text-center">
-                <h1 class="h4 text-gray-900 mb-4">สร้างบัญชีผู้ใช้</h1>
+                <h1 class="h4 text-gray-900 mb-4">เข้าสู่ระบบ</h1>
               </div>
               <?php if($this->session->flashdata('message')): ?>
                 <div class="alert alert-<?php echo $this->session->flashdata('type'); ?>"><?php echo $this->session->flashdata('message'); ?></div>

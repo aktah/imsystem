@@ -32,6 +32,7 @@
                 }
                 
                 if (!empty($userToken["id"]) && $isPasswordVerified && $isSelectorVerified && $isExpiryDareVerified) {
+                    $this->session->set_userdata(array("member_id" => $this->user_model->getUserIDByName(get_cookie("member_login"))));
                     return true;
                 } else {
                     if(!empty($userToken["id"])) {

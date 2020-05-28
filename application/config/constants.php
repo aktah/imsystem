@@ -84,6 +84,30 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-defined('OAUTH2_CLIENT_ID')      OR define('OAUTH2_CLIENT_ID', '650541426127536129');
-defined('OAUTH2_CLIENT_SECRET')      OR define('OAUTH2_CLIENT_SECRET', 'uIPuPuS60c9aHg5eir57UgDE5pMTaQaJ');
+defined('USER_ROLES')      OR define('USER_ROLES', Array(
+    'USER' =>   0,  // ผู้ใช้บริการ
+    'MOD' =>    1,  // ผู้ดูแลเครื่องมือ
+    'STAFF' =>  2,  // เจ้าหน้าที่
+    'ADMIN' =>  4   // ผู้ดูแลระบบ
+));
+
+defined('USER_PERMISSION')      OR define('USER_PERMISSION', Array(
+    'MANAGE_SERVICE' => 1,      // เพิ่ม/แก้ไข/ค้นหาและแสดง ข้อมูลการเข้าใช้บริการ
+    'CANCEL_SERVICE' => 2,      // ยกเลิกข้อมูลการเข้าใช้บริการ
+    'PROCESS_SERVICE' => 4,     // คำนวนค่าเข้าใช้บริการ
+    'SUM_SERVICE' =>  8        // ออกใบสรุปยอดค่าบริการ
+));
+
+defined('USER_ACCESS')      OR define('USER_ACCESS', Array(
+    'USER',
+    'MOD' => 
+        USER_PERMISSION['MANAGE_SERVICE'],
+    'STAFF' => 
+        USER_PERMISSION['PROCESS_SERVICE'],
+        USER_PERMISSION['MANAGE_SERVICE'],
+    'ADMIN' =>  
+        USER_PERMISSION['PROCESS_SERVICE'],
+        USER_PERMISSION['MANAGE_SERVICE'],
+        USER_PERMISSION['CANCEL_SERVICE']
+));
 

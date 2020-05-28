@@ -30,3 +30,66 @@
     background-color: #4e73df;
     color: white;
 }
+
+/* Custom Calendar */
+
+#external-events .fc-event {
+  padding: 0.5em;
+  margin: 1em 0;
+  cursor: move;
+}
+
+span.fc-title {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/* Upload */
+
+.mmn-dropzone { 
+    color: #ccc; 
+    border-radius: 10px; 
+    border: 2px dashed #ccc; 
+    height: 200px; 
+    line-height: 200px; 
+    margin-bottom: 20px; 
+    text-align: center; 
+}
+
+.mmn-dropzones {
+    color: #ccc; 
+    border-radius: 10px; 
+    border: 2px dashed #ccc; 
+    height: 200px; 
+    line-height: 200px; 
+    margin-bottom: 20px; 
+    width: 100%;
+    text-align: center; 
+}
+
+.mmn-dropzone.mmn-drop, .mmn-dropzones.mmn-drop { 
+    border-color: #000; 
+    color: #000; 
+}
+
+.mmn-thumbnail { 
+    border: 1px solid rgba(0, 0, 0, 0.39); 
+    overflow: hidden; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+}
+.mmn-thumbnail img { 
+    display: inline-block; 
+    float: left; 
+    margin-right: 10px; 
+    max-height: 150px; 
+    max-width: 200px; 
+    /*filter: grayscale(1); 
+    -webkit-filter: grayscale(1); */
+}
+/*
+.mmn-thumbnail img:hover { 
+    filter: grayscale(0); 
+    -webkit-filter: grayscale(0); 
+}*/

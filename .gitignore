@@ -27,3 +27,7 @@ docs
 *.sublime-project
 /tests/tests/
 /tests/results/
+
+!assets/uploads
+assets/uploads/profiles/*.*
+assets/uploads/*.*

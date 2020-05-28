@@ -11,13 +11,64 @@
 		}
 		
 		public function index(){
-			$username = $this->auth_model->getMemberByID($this->session->userdata('member_id'))["member_name"];
-			
-			$data['username'] = $username;
+			// $username = $this->auth_model->getMemberByID($this->session->userdata('member_id'))["member_name"];
+
+			$data['user'] = $this->user_model->details($this->session->userdata('member_id'));
 
 			$this->load->view('templates/header');
 			$this->load->view('pages/index', $data);
 			$this->load->view('templates/footer');
+		}
+		
+		public function updateProfile() {	
+
+			$this->form_validation->set_rules('fullname', 'ชื่อ-นามสกุล', 'required');
+			$this->form_validation->set_rules('email', 'ที่อยู่อีเมล', 'required');
+
+			if($this->form_validation->run() === FALSE){
+
+				$data['user'] = $this->user_model->details($this->session->userdata('member_id'));
+
+				$this->load->view('templates/header');
+				$this->load->view('pages/index', $data);
+				$this->load->view('templates/footer');
+			} else {
+				if ($this->user_model->member_update()) {
+					$this->session->set_flashdata('message', "อัปเดตข้อมูลสมาชิกเรียบร้อยแล้ว!");
+					$this->session->set_flashdata('type', "success");
+					redirect("imsystem");
+				}
+				else {
+					$this->session->set_flashdata('message', "รหัสผ่านไม่ตรงกัน!");
+					$this->session->set_flashdata('type', "danger");
+					redirect("imsystem");
+				}
+			}
+		}
+
+		public function uploadimage() {
+
+			$path = "/profiles";
+
+			$config['upload_path']          = './assets/uploads' . $path;
+			$config['allowed_types']        = 'gif|jpg|png';
+			$config['max_size']             = 6000;
+			$config['overwrite']     		= TRUE;
+			$config['file_name']			= 'user_'.$this->input->post('token');
+
+			$this->load->library('upload', $config);
+
+			if ( ! $this->upload->do_upload('uploadImage'))
+			{
+				$error = array('error' => $this->upload->display_errors('', ''), '');
+				echo json_encode($error);
+			}
+			else
+			{
+				$this->user_model->tempImage($path, $this->upload->data()["raw_name"], $this->upload->data()["file_ext"], $this->input->post('token'));
+				$data = array('upload_data' => $this->upload->data(), 'baseurl' => base_url(), 'path' => $path);
+				echo json_encode($data);
+			}
 		}
 
 		public function login() {

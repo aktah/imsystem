@@ -10,9 +10,21 @@
             return $query->row_array();
         }
         
-        public function getMemberByID($username) {
-            $query = $this->db->get_where('members', array('member_id' => $username));
+        public function getMemberByID($id) {
+            $query = $this->db->get_where('members', array('member_id' => $id));
             return $query->row_array();
+        }
+
+        public function getMemberRole($username) {
+            $this->db->select('member_role');
+            $query = $this->db->get_where('members', array('member_name' => $username));
+            return $query->row_array()['member_role'];
+        }
+
+        public function getMemberRoleByID($id) {
+            $this->db->select('member_role');
+            $query = $this->db->get_where('members', array('member_id' => $id));
+            return $query->row_array()['member_role'];
         }
 
         public function getTokenByUsername($username,$expired) {
@@ -51,7 +63,7 @@
             return $this->db->insert('members', $data);
         }
 
-        public function hasPermission($flags, $value) {
+        public function hasFlags($flags, $value) {
             if (($flags & $value) == $value) {
                 return true;
             }

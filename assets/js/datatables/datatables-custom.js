@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $('#usersTable').dataTable({
+  $('#usersTable, #instrumentsTable').dataTable({
     "language": {
         "sEmptyTable":     "ไม่มีข้อมูลในตาราง",
         "sInfo":           "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
