@@ -146,6 +146,13 @@
 		public function ins_fetch() {
 			$data = array();
 			array_push($data, array("id" => -1, "start" => "2020-05-24T09:00:00", "end" => "2020-05-26T09:00:00", "editable" => false));
+			array_push($data, array("id" => -1, "start" => "2020-05-28T09:00:00", "end" => "2020-05-31T09:00:00", "editable" => false));
+			array_push($data, array("id" => -1, "start" => "2020-06-02T00:00:00.000Z", "end" => "2020-06-05T00:00:00.000Z", "editable" => false));
+			echo json_encode($data);
+		}
+
+		public function ins_insert() {
+			$data = array("userid" => $this->session->userdata('member_id'), "data" => $this->input->post('data'));
 			echo json_encode($data);
 		}
 	}

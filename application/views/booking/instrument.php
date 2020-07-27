@@ -5,7 +5,6 @@
     <div class="card-body">
       <div class="row justify-content-center">
           <div class="col-md-8">
-
           <?php
                 $count = 0; 
                 foreach($images as $image) : ?>
@@ -37,6 +36,8 @@
 
           </div>
 
+          <?php if($instruments['ins_status'] == 0 && $instruments['ins_unactive'] == 0) : ?>
+
           <div class="col-lg-6">
             <div id='calendar'></div>
           </div>
@@ -46,11 +47,18 @@
               <p>
                 <h2>Drag & Drop</h2>
               </p>
-              <div class='fc-event' data-event='{"title": "จองใช้เครื่องมือวิจัย #<?php echo $instruments['ins_id']; ?>"}'><?php echo $instruments['ins_name']; ?></div>
+              <div class='fc-event' data-event='{"title": "<?php echo $instruments['ins_name']; ?> #<?php echo $instruments['ins_id']; ?>"}'><?php echo $instruments['ins_name']; ?></div>
             </div>
-            <button type="button" id="rentConfirm" class="btn btn-primary">ยืนยัน</button>
           </div>
-
+          
+          <div class="my-3 justify-content-center">
+            <button type="button" id="rentConfirm" class="btn btn-primary">จองใช้เครื่องมือ</button>
+          </div>
+          <?php elseif($instruments['ins_status'] == 1 && $instruments['ins_unactive'] == 0) : ?>
+            <div class="col-lg-12 text-center">
+              <h2 class="text-warning">เครื่องมือวิจัยนี้อยู่ในระหว่างบำรุงรักษา</h2>
+            </div>
+          <?php endif; ?>
       </div>
     </div>
 </div>
@@ -92,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
     editable: true,
     droppable: true,
     eventOverlap: false,
+    allDayDefault: true,
     events: data,
       /*{ // this object will be "parsed" into an Event Object
         title: 'The Title', // a property!
@@ -128,7 +137,6 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('เกิดข้อผิดพลาดในขณะที่ดึงข้อมูล!');
       },
       color: 'tomato',   // a non-ajax option
-      textColor: 'tomato' // a non-ajax option
     },
     ]
   });
@@ -141,7 +149,85 @@ document.addEventListener('DOMContentLoaded', function() {
   */
 
   $("#rentConfirm").on("click", function (e) {
-    console.log(calendar.getEvents());
+    // console.log(calendar.getEvents());
+    //for(let i = 0; i != calendar.getEvents().length; i++) {
+    //  if (calendar.getEvents()[i].id != -1) {
+    //    console.log(calendar.getEvents()[i].start, calendar.getEvents()[i].end);
+    //  }
+    //}
+    let data = calendar.getEvents().filter(c => {
+      return c.id != -1;
+    }).map(c => {
+      return {start: c.start.toISOString(), end: c.end != null ? c.end.toISOString() : c.start.toISOString()};
+    });
+
+    var monthNamesThai = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน", "กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤษจิกายน","ธันวาคม"];
+    var dayNames = ["วันอาทิตย์ที่","วันจันทร์ที่","วันอังคารที่","วันพุทธที่","วันพฤหัสบดีที่","วันศุกร์ที่","วันเสาร์ที่"];
+    var monthNamesEng = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var dayNamesEng = ['Sunday','Monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+    let msg = "";
+
+    data.forEach((e) => {
+      let start = new Date(e.start);
+
+      if (e.start != e.end) {
+        let end = new Date(e.end);
+        msg += dayNames[start.getDay()]+" "+start.getDate()+" "+monthNamesThai[start.getMonth()]+" "+ start.getFullYear()+" - "+ dayNames[end.getDay()]+" "+ end.getDate()+" "+monthNamesThai[end.getMonth()]+" "+ end.getFullYear() + "\n";
+      }
+      else {
+        msg += dayNames[start.getDay()]+" "+start.getDate()+" "+monthNamesThai[start.getMonth()]+" "+ start.getFullYear() + "\n";
+      }
+    });
+
+    if (data.length == 0)
+      return;
+
+    if (!confirm("คุณแน่ใจแล้วใช่ไหมที่จะจองใช้เครื่องมือวิจัยนี้ ?\n\nรายละเอียด:\n" + msg))
+      return;
+
+    // แสดงเฉพาะวันจอง (ไม่นับรวม Events ที่ถูกจองแล้ว)
+    // DEBUG
+    /*data.forEach((d) => {
+      console.log("เริ่ม", d.start, "จบ", d.end);
+    });*/
+
+    // ส่งข้อมูลไปยัง Server ด้วย Ajax
+
+    $.ajax({
+      url: '<?php echo base_url(); ?>instruments/ins_insert', 
+      method: 'POST',
+      data: 
+      'data=' + JSON.stringify(data) + '&' +
+      'ins_id=' + <?php echo $instruments['ins_id']; ?>,
+      success: function(result) {
+
+        /*let events = JSON.parse(JSON.parse(result).data);
+
+        // เพิ่ม event ที่ผู้ใช้งานเพิ่มเข้าไป
+        events.forEach((e) => {
+          calendar.addEvent({
+            id: -1,
+            start: e.start,
+            end: e.end,
+            color: 'tomato',
+            editable: false
+          });
+
+        });
+
+        // ลบ event ที่ผู้ใช้งานเพิ่มเข้าไปทั้งหมด
+        calendar.getEvents().forEach((e) => {
+          if (e.id != -1)
+            e.remove();
+        });*/
+        alert('ส่งเรื่องไปเรียบร้อยแล้ว!');
+
+        window.location.replace("<?php echo base_url(); ?>booking");
+
+      }
+    });
+
   });
 });
 /*
