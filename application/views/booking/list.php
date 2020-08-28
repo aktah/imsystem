@@ -61,7 +61,7 @@
             <?php endif; ?>
 
             <td class="text-center">
-                  <a href="<?php echo base_url();?>booking/instrument/<?php echo $instrument["ins_id"];?>" class="btn btn-primary <?php echo $instrument["ins_status"] ? 'btn-secondary' : ''?>">จองใช้บริการ</a>
+                  <a href="<?php echo base_url();?>booking/instrument/<?php echo $instrument["ins_id"];?>" class="btn btn-primary <?php echo $instrument["ins_status"] ? 'btn-light' : ''?>">จองใช้บริการ</a>
             </td>
 
           </tr>
