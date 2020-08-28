@@ -34,7 +34,13 @@
         <tbody>
         <?php foreach($users as $user) : ?>
           <tr>
-            <td><a href="<?php echo base_url();?>users/view/<?php echo $user["member_id"];?>"><?php echo (!empty($user["member_fullname"])) ? $user["member_fullname"]. " (". $user["member_name"] .")" : $user["member_name"];?></a></td>
+            <td><a class="nav-link" href="<?php echo base_url();?>users/view/<?php echo $user["member_id"];?>">
+                <?php if (!empty($user["member_profile"])) : ?>
+                <img style="height: 2rem;width: 2rem;" class="img-profile rounded-circle" src="<?php echo base_url() . "assets/uploads" . $user["member_profile"]; ?>" onerror="this.onerror=null; this.src='<?php echo base_url() ?>assets/images/NO_IMG_600x600.png'">
+                <?php endif; ?>
+                <?php echo (!empty($user["member_fullname"])) ? $user["member_fullname"]. " (". $user["member_name"] .")" : $user["member_name"];?>
+              </a>
+            </td>
             <td><?php echo (!empty($user["member_affiliation"])) ? $user["member_affiliation"] : "<i>ยังไม่มีข้อมูล</i>";?></td>
             <td><?php echo $user["created_at"];?></td>
             <td><?php echo (!empty($user["updated_at"])) ? $user["updated_at"] : "<i>ยังไม่มีการอัปเดตข้อมูล</i>";?></td>
