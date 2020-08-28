@@ -4,16 +4,16 @@
 		public function __construct(){
 			parent::__construct();
 			$this->load->model('authCookie_model');
-
 			if(!$this->authCookie_model->isLoggedIn() && $this->uri->segment(2) != 'login' && $this->uri->segment(2) != 'frmLogin') {
 				redirect('imsystem/login');
 			}
 		}
-		
-		public function index(){
-			// $username = $this->auth_model->getMemberByID($this->session->userdata('member_id'))["member_name"];
 
+		public function index(){
 			$data['user'] = $this->user_model->details($this->session->userdata('member_id'));
+
+			$this->load->model("booking_model");
+			$data['rent'] = $this->booking_model->getData(NULL, $this->session->userdata('member_id'), -1)->result_array();
 
 			$this->load->view('templates/header');
 			$this->load->view('pages/index', $data);

@@ -1,5 +1,14 @@
 <?php
 	class Users extends CI_Controller{
+
+		public function __construct(){
+			parent::__construct();
+			$this->load->model('authCookie_model');
+			if(!$this->authCookie_model->isLoggedIn()) {
+				redirect('imsystem/login');
+			}
+		}
+		
 		public function index() {
 
 			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) {

@@ -1,5 +1,14 @@
 <?php
 	class Instruments extends CI_Controller{
+
+		public function __construct(){
+			parent::__construct();
+			$this->load->model('authCookie_model');
+			if(!$this->authCookie_model->isLoggedIn()) {
+				redirect('imsystem/login');
+			}
+		}
+
 		public function index() {
 			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) {
 				redirect("imsystem");
@@ -13,6 +22,20 @@
 			$this->load->view('templates/footer');
 		}
 
+		public function list() {
+			// POST data
+			$postData = $this->input->post('search');
+
+			// Get data
+			$data = $this->instrument_model->list($postData);
+
+			foreach($data as $ins ){
+				$response[] = array("value"=>$ins['ins_id'],"label"=>$ins['ins_name']);
+			}
+
+			echo json_encode($response);
+		}
+
 		public function view($id) {
 			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) {
 				redirect("imsystem");
@@ -20,8 +43,7 @@
 			}
 
 			$data['instrument'] = $this->instrument_model->details($id);
-			$data['storageId'] = $this->instrument_model->getStorageID($data['instrument']['ins_id']);
-			$data['attendantId'] = $this->instrument_model->getAttendantID($data['instrument']['ins_id']);
+			$data['attendant'] = $this->instrument_model->getAttendant($data['instrument']['ins_id']);
 			$data['images'] = $this->instrument_model->getImages($data['instrument']['ins_id'], $data['instrument']['image_token']);
 
 			if ($data['instrument']) {
@@ -142,17 +164,68 @@
 			}
 			
 		}
+
+		public function ins_fetch_approve() {
+			$data = array();
+
+			$this->load->model("booking_model");
+			$query = $this->booking_model->getData(NULL, $this->input->post('member_id'), $this->input->post('status'));
+			
+			foreach($query->result_array() as $e) {
+				array_push($data, array("id" => -1, "title" => $e["ins_name"], "start" => $e["startDate"], "end" => $e["endDate"], "editable" => false));
+			}
+
+			echo json_encode($data);
+		}
 		
 		public function ins_fetch() {
 			$data = array();
-			array_push($data, array("id" => -1, "start" => "2020-05-24T09:00:00", "end" => "2020-05-26T09:00:00", "editable" => false));
-			array_push($data, array("id" => -1, "start" => "2020-05-28T09:00:00", "end" => "2020-05-31T09:00:00", "editable" => false));
-			array_push($data, array("id" => -1, "start" => "2020-06-02T00:00:00.000Z", "end" => "2020-06-05T00:00:00.000Z", "editable" => false));
+
+			$this->load->model("booking_model");
+			$query = $this->booking_model->list($this->input->post('ins_id'));
+			
+			foreach($query->result_array() as $e) {
+				array_push($data, array("id" => -1, "start" => $e["startDate"], "end" => $e["endDate"], "editable" => false));
+			}
+
 			echo json_encode($data);
 		}
 
 		public function ins_insert() {
-			$data = array("userid" => $this->session->userdata('member_id'), "data" => $this->input->post('data'));
+
+			$data['success'] = false;
+
+			$issuer = $this->session->userdata('member_id');
+			$instumentID = $this->input->post('ins_id');
+			$raw_data = $this->input->post('data');
+
+			$event = json_decode($raw_data, true);
+			
+			$this->load->model("booking_model");
+
+			// is exists
+			foreach ($event as $e) {
+
+				$result = $this->booking_model->isExists($instumentID, $e['startStr'], $e['endStr']);
+
+				if ($result->num_rows()) {
+					$value = array(
+						'id' => $e['id'],
+						'status' => 'เลือกระยะเวลาใหม่อีกครั้ง'
+					);
+					$data['data'][] = $value;
+				}
+			}
+
+			if (isset($data['data'])) {
+				echo json_encode($data);
+				return;
+			}
+
+			$this->booking_model->booking($instumentID, $issuer, $event);
+			
+			$data['success'] = true;
+
 			echo json_encode($data);
 		}
 	}

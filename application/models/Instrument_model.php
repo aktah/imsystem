@@ -1,28 +1,31 @@
 <?php
 	class Instrument_model extends CI_Model{
 
-        public function list()
+        public function list($search = NULL)
         {
             /*if (!$showAll) {
                 $this->db->where('ins_status = 1');
             }*/
-
+            if ($search !== NULL) {
+                $this->db->like('ins_name', $search, 'both'); 
+            }
             $query = $this->db->get('instruments');
 
             return $query->result_array();
         }
 
-        public function getStorageID($id) {
+        /*public function getStorageID($id) {
             $query = $this->db->get_where('store', array('instrument_id'=>$id));
             $storageId = $query->row_array()['storage_id'];
             return $storageId ? $storageId : 0;
-        }
+        }*/
 
-        public function getAttendantID($id) {
+        /*public function getAttendantID($id) {
+            $this->db->select("members.member_id, members.member_name, members.member_fullname");
+            $this->db->join('members', 'members.member_id = store.attendant');
             $query = $this->db->get_where('store', array('instrument_id'=>$id));
-            $attendantId = $query->row_array()['attendant'];
-            return $attendantId ? $attendantId : 0;
-        }
+            return $query->result_array();
+        }*/
   
         public function getImages($id, $token) {
             $query = $this->db->get_where('intrument_upload', array('intrument_id'=>$id, 'image_token'=>$token));
@@ -54,26 +57,47 @@
             return $insertId;
         }
 
-        public function getAttendantData($instrumentID) {
-
-            $query = $this->db->get_where('store', array('instrument_id' => $instrumentID));
-
-            if ($query->num_rows()) {
-                if ($query->row_array()["attendant"] != 0) {
-                    return $this->user_model->getUserByID($query->row_array()["attendant"]);
-                }
-            }
-
-            return NULL;
+        public function getAttendant($instrumentID) {
+            $this->db->join('members', 'members.member_id = instrument_attendant.attendant');
+            $query = $this->db->get_where('instrument_attendant', array('instrument_id' => $instrumentID));
+            return $query->result_array();
         }
 
         public function instrument_update() {
+            $instrumentID = $this->input->post('id');
+
+            $addStaff = $this->input->post('addStaff') ? json_decode($this->input->post('addStaff'), true) : NULL;
+            if ($addStaff) {
+                foreach($addStaff as $staff) {
+
+                    $data = array(
+                        "instrument_id" => $instrumentID,
+                        "attendant" => $staff['id']
+                    );
+                
+                    $this->db->insert('instrument_attendant', $data);
+                }
+            }
+
+            $removeStaff = $this->input->post('removeStaff') ? json_decode($this->input->post('removeStaff'), true) : NULL;
+            if ($removeStaff) {
+                foreach($removeStaff as $staff) {
+
+                    $data = array(
+                        "instrument_id" => $instrumentID,
+                        "attendant" => $staff['id']
+                    );
+                
+                    $this->db->delete('instrument_attendant', $data);
+                }
+            }
 
             $now = date("Y-m-d H:i:s");
 
             $data = array(
                 'ins_name' => $this->input->post('name'),
                 'ins_description' => $this->input->post('details'),
+                'ins_store' => $this->input->post('instrument_storage') == 0 ? NULL : $this->input->post('instrument_storage'),
                 'ins_status' => $this->input->post('status') !== NULL ? true : false,
                 'ins_unactive' => $this->input->post('unactive') !== NULL ? true : false,
                 'image_token' => $this->input->post('token'),
@@ -82,11 +106,11 @@
 
             $imageToken = $this->instrument_model->getImageToken($this->input->post('token'));
             if ($imageToken != NULL) {
-				$this->instrument_model->activeImage($this->input->post('token'), $this->input->post('id'));
+				$this->instrument_model->activeImage($this->input->post('token'), $instrumentID);
                 $this->instrument_model->clearTempImage();
             }
 
-            $this->db->where('ins_id', $this->input->post('id'));
+            $this->db->where('ins_id', $instrumentID);
             return $this->db->update('instruments', $data);
         }
         
@@ -97,6 +121,7 @@
                 'ins_description' => $this->input->post('details'),
                 'ins_status' => $this->input->post('status') !== NULL ? true : false,
                 'ins_unactive' => $this->input->post('unactive') !== NULL ? true : false,
+                'ins_store' => $this->input->post('instrument_storage') == 0 ? NULL : $this->input->post('instrument_storage'),
                 'image_token' => $this->input->post('token'),
             );
             
@@ -107,13 +132,20 @@
             if ($insertId) {
                 // Active Image
                 $this->instrument_model->activeImage($this->input->post('token'), $insertId);
-
-                // Storage
-                if ($this->input->post('instrument_storage') != 0) {
-                    $this->instrument_model->StoreInstrument($insertId, $this->input->post('instrument_storage'), $this->input->post('instrument_attendant'));
-                }
-
                 $this->instrument_model->clearTempImage();
+
+                $addStaff = $this->input->post('addStaff') ? json_decode($this->input->post('addStaff'), true) : NULL;
+                if ($addStaff) {
+                    foreach($addStaff as $staff) {
+    
+                        $data = array(
+                            "instrument_id" => $insertId,
+                            "attendant" => $staff['id']
+                        );
+                    
+                        $this->db->insert('instrument_attendant', $data);
+                    }
+                }
             }
 
             return $insertId;
@@ -131,16 +163,6 @@
                     unlink('./assets/uploads' . $imageData['image_path'] . '/' . $fileName);
                 }
             }
-        }
-
-        public function StoreInstrument($id, $storeid, $att)
-        {
-            $data = array(
-                "instrument_id" => $id,
-                "storage_id" => $storeid,
-                "attendant" => $att
-            );
-            return $this->db->on_duplicate('store', $data);
         }
 
         public function activeImage($token, $intrumentId)

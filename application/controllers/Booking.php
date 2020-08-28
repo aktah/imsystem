@@ -4,10 +4,15 @@
 		public function __construct() {
 			Parent::__construct();
 			$this->load->model("booking_model");
+			$this->load->model("authCookie_model");
+			if(!$this->authCookie_model->isLoggedIn()) {
+				redirect('imsystem/login');
+			}
 		}
 
 		public function index() {
-			$data['instruments'] = $this->instrument_model->list();
+			
+			$data['instruments'] = $this->instrument_model->list($this->input->post('search'));
 
 			$this->load->view('templates/header');
 			$this->load->view('booking/list', $data);

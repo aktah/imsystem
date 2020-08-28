@@ -310,11 +310,138 @@ var setImage = function(baseurl, path, filename) {
 }
 
 
-$(document).ready(function(){
+var removeStaff = [];
+var addStaff = [];
+
+function OnStaffRemove() {
+
+    let targetElement = $(this.parentElement);
+    const staffDBID = targetElement.attr('data-id');
+    targetElement.remove();
+
+    let idx = removeStaff.findIndex((v) => v.id == staffDBID);
+    if (idx == -1) {
+
+        let 
+            isChange = true,
+            isAdded = addStaff.findIndex((v) => v.id == staffDBID)
+        ;
+        const value = { name: targetElement.text(), id: staffDBID, current: isAdded };
+
+        if (isAdded != -1) {
+            if (addStaff[isAdded].current == -1) {
+                isChange = false;
+            }
+            addStaff.splice(isAdded, 1);
+        }
+
+        if (isChange) {
+            removeStaff.push(value);
+        }
+
+        let staffList = $("#instrument_attendant");
+        staffList.append(`<option value='${value.id}'>${value.name}</option>`);
+    }
+}
+
+function OnStaffAdd() {
+
+    let staffDBID = parseInt($('#instrument_attendant').val());
+    if (staffDBID > 0) {
+        let idx = addStaff.findIndex((v) => v.id == staffDBID);
+        if (idx == -1) {
+
+            let 
+                isChange = true,
+                isRemoved = removeStaff.findIndex((v) => v.id == staffDBID)
+            ;
+            const value = { name: $("#instrument_attendant option:selected" ).text(), id: staffDBID, current: isRemoved };
+
+            if (isRemoved != -1) {
+                if (removeStaff[isRemoved].current == -1) {
+                    isChange = false;
+                }
+                removeStaff.splice(isRemoved, 1);
+            }
+
+            if (isChange) {
+                addStaff.push(value);
+            }
+            $("#instrument_attendant option:selected" ).remove();
+
+            let staffList = $("#staff");
+            staffList.append(`<li id="staffList" data-id="${value.id}">${value.name}</li>`);
+            $('#staffList[data-id="' + value.id + '"').append(` <i name="removeStaff" class="fa fa-trash fa-xs float-right"></i>`);
+            $("#staffList i[name=removeStaff]").on('click', OnStaffRemove);
+        }
+    }
+}
+
+$(document).ready(function() {
+
     $('.close-modal').on('click', function(){ 
          $('.modal').modal('hide');
     });
+
+    $('i[name=removeStaff]').on('click', OnStaffRemove);
+    $('#addStaff').on('click', OnStaffAdd);
+
+    $("#formInstrument").submit(function(e) {
+
+        // e.preventDefault();
+    
+        $(this).append($("<input>", {
+            type: "hidden",
+            name: "addStaff",
+            value: JSON.stringify(addStaff)
+        }));
+
+        $(this).append($("<input>", {
+            type: "hidden",
+            name: "removeStaff",
+            value: JSON.stringify(removeStaff)
+        }));
+
+        /*var form = $(this);
+        var url = form.attr('action');
+        
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: form.serialize() + "&removeStaff=" + JSON.stringify(removeStaff) + "&addStaff=" + JSON.stringify(addStaff), // serializes the form's elements.
+          success: function()
+          {
+
+          }
+        });*/
+
+    });
+
+
+    $( "#autoins" ).autocomplete({
+      source: function( request, response ) {
+        // Fetch data
+        $.ajax({
+          url: "instruments/list",
+          type: 'POST',
+          dataType: "json",
+          data: {
+            search: request.term
+          },
+          success: function( data ) {
+            response( data );
+          }
+        });
+      },
+      select: function (event, ui) {
+        // Set selection
+        $('#autoins').val(ui.item.label); // display the selected text
+     //    $('#insid').val(ui.item.value); // save selected id to input
+        return false;
+      }
+    });
 });
+
 
 $(document).on('click', '[data-toggle="lightbox"]', function(event) {
     event.preventDefault();

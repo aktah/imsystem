@@ -2,7 +2,7 @@
 <!-- Page Heading -->
 <h1 class="h3 mb-2 text-gray-800">รายละเอียดเครื่องมือวิจัย</h1>
 
-<?php echo form_open_multipart('instruments/update');?>
+<?php echo form_open_multipart('instruments/update', array('id' => 'formInstrument'));?>
 
 <input type="hidden" id="uploadUrl" name="uploadUrl" value="<?php echo base_url();?>instruments/uploadimage" />
 <input type="hidden" id="unloadUrl" name="unloadUrl" value="<?php echo base_url();?>instruments/unloadimage" />
@@ -53,7 +53,7 @@
                     <select id="storagePick" class="form-control form-control-sm" name="instrument_storage">
                     <option value='0'>— เลือกสถานที่จัดเก็บ —</option>
                     <?php foreach($this->instrument_model->storageList() as $storage) : ?>
-                    <option value='<?php echo $storage["storage_id"]; ?>' <?php echo $storageId == $storage["storage_id"] ? 'selected' : '' ?>><?php echo $storage["storage_name"]; ?></option>
+                    <option value='<?php echo $storage["storage_id"]; ?>' <?php echo $storage["storage_id"] == $instrument["ins_store"] ? 'selected' : '' ?>><?php echo $storage["storage_name"]; ?></option>
                     <?php endforeach; ?>
                     <option value='-1'>— เพิ่มใหม่ —</option>
                     </select>
@@ -61,16 +61,43 @@
                 </div>
 
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right">เลือกผู้รับผิดชอบ:</label>
+                  <label class="col-sm-2 col-form-label text-md-right">ผู้ดูแล:</label>
                   <div class="col-sm-10">
-                  <select class="form-control form-control-sm" name="instrument_attendant">
-                    <option value='0'>— ไม่มี —</option>
+                  <div class="col-lg-12">ผู้ดูแลเครื่องมือวิจัยนี้</div>
+                  <div class="col-lg-3">
+                  <ul id="staff" style="list-style-type:none;">
+                    <?php if ($attendant) : ?>
+                      <?php foreach ($attendant as $att) : ?>
+                        <li id="staffList" data-id="<?php echo $att["member_id"]; ?>"><?php echo (!empty($att["member_fullname"])) ? $att["member_fullname"]. " (". $att["member_name"] .")" : $att["member_name"]; ?> <i name="removeStaff" class="fa fa-trash fa-xs float-right"></i></li>
+                      <?php endforeach; ?>
+                    <?php endif; ?>
+                  </ul> 
+                  </div>
+                  <hr>
+                  <div class="form-inline">
+                  <select class="form-control form-control-sm mr-2" id="instrument_attendant">
+                    <option value='0'>— เลือกผู้ดูแล —</option>
                     <?php foreach($this->user_model->list() as $member) : ?>
-                      <?php if ($this->auth_model->hasFlags($this->auth_model->getMemberRole($member["member_name"]), USER_ROLES['STAFF'])) : ?> <!-- ผู้ใช้ต้องมีบทบาทเป็นเจ้าหน้าที่เท่านั้น -->
+
+                      <?php $alreadyMember = false; ?>
+                      <?php foreach ($attendant as $att) : ?>
+                        <?php  
+                          if ($att["member_id"] == $member["member_id"]) {
+                            $alreadyMember = true; 
+                            break;
+                          } 
+                        ?>
+                      <?php endforeach; ?>
+
+                      <?php if (!$alreadyMember && $this->auth_model->hasFlags($this->auth_model->getMemberRole($member["member_name"]), USER_ROLES['MOD'])) : ?> <!-- ผู้ใช้ต้องมีบทบาทเป็นผู้ดูแลเท่านั้น -->
                           <option value='<?php echo $member["member_id"]; ?>'><?php echo (!empty($member["member_fullname"])) ? $member["member_fullname"]. " (". $member["member_name"] .")" : $member["member_name"];?></option>
                       <?php endif;?>
                     <?php endforeach; ?>
                   </select>
+                  <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-xs" id="addStaff">เพิ่ม</button>
+                  </div>
+                  </div>
                   </div>
                 </div>
 
@@ -106,6 +133,7 @@
                 <div class="mmn-dropzones">
                   วางไฟล์รูปภาพที่นี่เพื่ออัปโหลด
                 </div>
+                <small>เพิ่มเติม: คลิกที่รูปภาพเพื่อลบขั้นตอนนี้ไม่สามารถย้อนกลับได้</small>
                 <!-- Progress Bar -->
                 <div class="progress bg-light mmn-progress">
                   <div class="progress-bar bg-success mmn-progress-bar" role="progressbar" style="width:0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
@@ -137,7 +165,7 @@
 
 <div class="form-group row">
     <div class="col-lg-12">
-        <div class="text-center"><button type="submit" class="btn btn-outline-secondary mb-2 mr-sm-2">บันทึก</button></div>
+        <div class="text-center"><button id="saveIntrument" type="submit" class="btn btn-outline-secondary mb-2 mr-sm-2">บันทึก</button></div>
     </div>
 </div>
 </form>

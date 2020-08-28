@@ -38,16 +38,30 @@
 
           <?php if($instruments['ins_status'] == 0 && $instruments['ins_unactive'] == 0) : ?>
 
-          <div class="col-lg-6">
+          <div class="col-lg-6 ">
             <div id='calendar'></div>
           </div>
 
           <div class="col-lg-6">
-            <div id='external-events'>
-              <p>
-                <h2>Drag & Drop</h2>
-              </p>
-              <div class='fc-event' data-event='{"title": "<?php echo $instruments['ins_name']; ?> #<?php echo $instruments['ins_id']; ?>"}'><?php echo $instruments['ins_name']; ?></div>
+            <div class="form-group col-lg-12 my-5">
+              <div class="text-center" id='external-events'>
+                <p>
+                  <h2>Drag & Drop</h2>
+                  <small class="text-mute">ลากและวางไปที่ปฏิทิน</small>
+                </p>
+                <p class="text-left">Event(s) <small>เหตุการณ์</small></p>
+                <div class='text-left fc-event' data-event='{"title": "<?php echo $instruments['ins_name']; ?> #<?php echo $instruments['ins_id']; ?>"}'><?php echo $instruments['ins_name']; ?></div>
+              </div>
+              <small class="text-info">แนะนำ: คลิกซ้ายที่เหตุการณ์หนึ่งครั้งเพื่อยกเลิก</small>
+            </div>
+            <div class="form-group col-lg-12 my-5">
+              <h4>รายละเอียดเพิ่มเติม</h4>
+              <ul class="list-group">
+                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:lightgray;display:inline;"></div> ไม่สามารถจองได้</li>
+                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:#3788d8;display:inline;"></div> เหตุการณ์จองของคุณ</li>
+                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:indianred;display:inline;"></div> เหตุการณ์จองที่มีข้อผิดพลาดเกิดขึ้น</li>
+                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:goldenrod;display:inline;"></div> เหตุการณ์จองที่มีการแก้ไขหลังเกิดข้อผิดพลาด</li>
+              </ul>
             </div>
           </div>
           
@@ -120,13 +134,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // info.draggedEl.parentNode.removeChild(info.draggedEl);
     },
+    eventResize: function(info) {
+      calendar.refetchEvents();
+      let targetEvent = calendar.getEventById(info.event.id);
+      if (targetEvent.extendedProps.overlap) {
+        targetEvent.setProp("title", "<?php echo $instruments['ins_name']; ?> #<?php echo $instruments['ins_id']; ?>");
+        targetEvent.setProp("backgroundColor", "goldenrod");
+        targetEvent.setProp("borderColor", "goldenrod");
+      }
+    },
+    eventDrop: function(info) {
+      calendar.refetchEvents();
+      let targetEvent = calendar.getEventById(info.event.id);
+      if (targetEvent.extendedProps.overlap) {
+        targetEvent.setProp("title", "<?php echo $instruments['ins_name']; ?> #<?php echo $instruments['ins_id']; ?>");
+        targetEvent.setProp("backgroundColor", "goldenrod");
+        targetEvent.setProp("borderColor", "goldenrod");
+      }
+    },
     eventClick: function(info) {
-      console.log(info);
-      /*var event = calendar.getEventById(info.event.id);
-      event.remove();*/
+      if (info.event.id == -1)
+        return;
+      var event = calendar.getEventById(info.event.id);
+      event.remove();
     },
     eventSources: [
-    // your event source
+    //
     {
       url: '<?php echo base_url(); ?>instruments/ins_fetch',
       method: 'POST',
@@ -136,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
       failure: function() {
         alert('เกิดข้อผิดพลาดในขณะที่ดึงข้อมูล!');
       },
-      color: 'tomato',   // a non-ajax option
+      color: 'lightgray',   // a non-ajax option
     },
     ]
   });
@@ -158,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let data = calendar.getEvents().filter(c => {
       return c.id != -1;
     }).map(c => {
-      return {start: c.start.toISOString(), end: c.end != null ? c.end.toISOString() : c.start.toISOString()};
+      return { start: c.start.toISOString(), end: c.end != null ? c.end.toISOString() : c.start.toISOString(), id: c.id };
     });
 
     var monthNamesThai = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน", "กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤษจิกายน","ธันวาคม"];
@@ -169,14 +202,21 @@ document.addEventListener('DOMContentLoaded', function() {
     let msg = "";
 
     data.forEach((e) => {
+
       let start = new Date(e.start);
 
       if (e.start != e.end) {
         let end = new Date(e.end);
         msg += dayNames[start.getDay()]+" "+start.getDate()+" "+monthNamesThai[start.getMonth()]+" "+ start.getFullYear()+" - "+ dayNames[end.getDay()]+" "+ end.getDate()+" "+monthNamesThai[end.getMonth()]+" "+ end.getFullYear() + "\n";
+      
+        e.startStr = new Date(e.start).toISOString().split('T')[0];
+        e.endStr = new Date(e.end).toISOString().split('T')[0];
       }
       else {
         msg += dayNames[start.getDay()]+" "+start.getDate()+" "+monthNamesThai[start.getMonth()]+" "+ start.getFullYear() + "\n";
+
+        e.startStr = new Date(e.start).toISOString().split('T')[0];
+        e.endStr = e.startStr;
       }
     });
 
@@ -192,8 +232,6 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log("เริ่ม", d.start, "จบ", d.end);
     });*/
 
-    // ส่งข้อมูลไปยัง Server ด้วย Ajax
-
     $.ajax({
       url: '<?php echo base_url(); ?>instruments/ins_insert', 
       method: 'POST',
@@ -202,29 +240,21 @@ document.addEventListener('DOMContentLoaded', function() {
       'ins_id=' + <?php echo $instruments['ins_id']; ?>,
       success: function(result) {
 
-        /*let events = JSON.parse(JSON.parse(result).data);
+        let msg = JSON.parse(result);
 
-        // เพิ่ม event ที่ผู้ใช้งานเพิ่มเข้าไป
-        events.forEach((e) => {
-          calendar.addEvent({
-            id: -1,
-            start: e.start,
-            end: e.end,
-            color: 'tomato',
-            editable: false
+        if (!msg.success) {
+          let eventData = msg.data;
+          eventData.forEach(e => {
+            let targetEvent = calendar.getEventById(e.id);
+            targetEvent.setProp("backgroundColor", "indianred");
+            targetEvent.setProp("borderColor", "indianred");
+            targetEvent.setProp("title", e.status);
+            targetEvent.setExtendedProp("overlap", true);
+            calendar.refetchEvents();
           });
-
-        });
-
-        // ลบ event ที่ผู้ใช้งานเพิ่มเข้าไปทั้งหมด
-        calendar.getEvents().forEach((e) => {
-          if (e.id != -1)
-            e.remove();
-        });*/
-        alert('ส่งเรื่องไปเรียบร้อยแล้ว!');
-
-        window.location.replace("<?php echo base_url(); ?>booking");
-
+        } else {
+          window.location.replace("<?php echo base_url(); ?>");
+        }
       }
     });
 
@@ -257,6 +287,7 @@ function selectEvent(selectionInfo) {
     const event = new Date(currentDate.getTime() + 86400000);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     event.toLocaleDateString('th-TH', options)*/
+
 </script>
 
 

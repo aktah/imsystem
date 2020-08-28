@@ -27,14 +27,14 @@
         <thead>
           <tr>
             <th>ชื่อ</th>
-            <th>ผู้รับผิดชอบ</th>
+            <th>ผู้ดูแล</th>
             <th></th>
           </tr>
         </thead>
         <tfoot>
           <tr>
             <th>ชื่อ</th>
-            <th>ผู้รับผิดชอบ</th>
+            <th>ผู้ดูแล</th>
             <th></th>
           </tr>
         </tfoot>
@@ -49,18 +49,19 @@
                 (อยู่ในระหว่างบำรุงรักษา)
             <?php endif; ?>
             </td>
-            <?php 
-                  $attData = $this->instrument_model->getAttendantData($instrument["ins_id"]); 
-                  
-                  if($attData != NULL) : 
-            ?>
-            <td><?php echo $attData["member_fullname"];?></td>
-              <?php else: ?>
+            <?php $attData = $this->instrument_model->getAttendant($instrument["ins_id"]); ?>
+            <?php if($attData) : ?>
+              <td>
+              <?php foreach($attData as $att) : ?>
+                <?php echo $att["member_fullname"];?><br>
+              <?php endforeach; ?>
+              </td>
+            <?php else: ?>
             <td><i>ไม่มี</i></td>
             <?php endif; ?>
 
             <td class="text-center">
-                  <button class="btn btn-primary" <?php echo $instrument["ins_status"] ? 'disabled' : ''?>>จองใช้บริการ</button>
+                  <a href="<?php echo base_url();?>booking/instrument/<?php echo $instrument["ins_id"];?>" class="btn btn-primary <?php echo $instrument["ins_status"] ? 'btn-secondary' : ''?>">จองใช้บริการ</a>
             </td>
 
           </tr>
