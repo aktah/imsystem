@@ -27,15 +27,15 @@
         <thead>
           <tr>
             <th>ชื่อ</th>
-            <th>ผู้ดูแล</th>
-            <th></th>
+            <th>สถานะ</th>
+            <!--<th>ผู้ดูแล</th>-->
           </tr>
         </thead>
         <tfoot>
           <tr>
             <th>ชื่อ</th>
-            <th>ผู้ดูแล</th>
-            <th></th>
+            <th>สถานะ</th>
+            <!--<th>ผู้ดูแล</th>-->
           </tr>
         </tfoot>
         <tbody>
@@ -49,6 +49,19 @@
                 (อยู่ในระหว่างบำรุงรักษา)
             <?php endif; ?>
             </td>
+
+            <td class="text-center" style="vertical-align: middle;">
+
+            <div class="row justify-content-center my-auto">
+            <?php if (!$instrument["ins_status"] && !$instrument["ins_unactive"]) : ?>
+              <h6 ><span class="badge badge-success">พร้อมใช้งาน</span></h6>
+            <?php else:?>
+              <h6><span class="badge badge-secondary">ไม่พร้อมใช้งาน</span></h6>
+            <?php endif; ?>
+            </div>
+            </td>
+
+<!--
             <?php $attData = $this->instrument_model->getAttendant($instrument["ins_id"]); ?>
             <?php if($attData) : ?>
               <td>
@@ -59,11 +72,7 @@
             <?php else: ?>
             <td><i>ไม่มี</i></td>
             <?php endif; ?>
-
-            <td class="text-center">
-                  <a href="<?php echo base_url();?>booking/instrument/<?php echo $instrument["ins_id"];?>" class="btn btn-primary <?php echo $instrument["ins_status"] ? 'btn-light' : ''?>">จองใช้บริการ</a>
-            </td>
-
+-->
           </tr>
         <?php endforeach; ?>
         </tbody>

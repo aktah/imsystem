@@ -35,14 +35,16 @@
           <tr>
             <th>#</th>
             <th>ชื่อ</th>
-            <th>ผู้ดูแล</th>
+            <th>สถานะ</th>
+            <!--<th>ผู้ดูแล</th>-->
           </tr>
         </thead>
         <tfoot>
           <tr>
             <th>#</th>
             <th>ชื่อ</th>
-            <th>ผู้ดูแล</th>
+            <th>สถานะ</th>
+            <!--<th>ผู้ดูแล</th>-->
           </tr>
         </tfoot>
         <tbody>
@@ -56,6 +58,19 @@
             <?php endif; ?>
             
             </td>
+
+            <td class="text-center" style="vertical-align: middle;">
+
+            <div class="row justify-content-center my-auto">
+            <?php if (!$instrument["ins_status"] && !$instrument["ins_unactive"]) : ?>
+              <h6 ><span class="badge badge-success">พร้อมใช้งาน</span></h6>
+            <?php else:?>
+              <h6><span class="badge badge-secondary">ไม่พร้อมใช้งาน</span></h6>
+            <?php endif; ?>
+            </div>
+
+            </td>
+<!--
             <?php $attData = $this->instrument_model->getAttendant($instrument["ins_id"]); ?>
             <?php if($attData) : ?>
               <td>
@@ -65,7 +80,7 @@
               </td>
             <?php else: ?>
             <td><i>ไม่มี</i></td>
-            <?php endif; ?>
+            <?php endif; ?> -->
           </tr>
         <?php endforeach; ?>
         </tbody>
