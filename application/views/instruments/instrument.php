@@ -111,13 +111,13 @@
                   <h4>สถานะและตั้งค่า</h4>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="status" name="status" <?php echo $instrument["ins_status"] ? ("checked") : (""); ?>>
+                <input class="form-check-input" type="checkbox" id="status" name="status" <?php echo $instrument["ins_maintenance"] ? ("checked") : (""); ?>>
                 <label class="form-check-label" for="status">
                   โหมดบำรุงรักษา
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="unactive" name="unactive" <?php echo $instrument["ins_unactive"] ? ("checked") : (""); ?>>
+                <input class="form-check-input" type="checkbox" id="unactive" name="unactive" <?php echo $instrument["ins_inactive"] ? ("checked") : (""); ?>>
                 <label class="form-check-label" for="unactive">
                   ปิดการใช้งาน
                 </label>

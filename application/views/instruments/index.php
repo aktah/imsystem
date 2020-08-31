@@ -4,18 +4,36 @@
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
-  <div class="card-header py-3 d-flex align-items-center justify-content-between">
-    <h6 class="m-0 font-weight-bold text-primary">รายชื่อเครื่องมือวิจัย</h6>
+  <div class="card-header py-3 d-flex flex-row justify-content-between">
+  <div class="d-flex align-items-start">
+    <h6 class="m-0 p-2 font-weight-bold text-primary d-flex align-items-start" style="border-right: 1px solid #e3e6f0;">รายชื่อเครื่องมือวิจัย</h6>
+    <div class="ml-2 d-flex d-flex align-items-start">
+    <?php 
+    $inactive = 0;
+    $active = 0;
+    $maintenance = 0;
 
-    <div class="d-flex align-items-right">
-
-      <a href="<?php echo base_url(); ?>instruments/create" class="btn btn-secondary ml-2"><i class="fas fa-plus-circle"></i> เพิ่มเครื่องมือ</a>
-
+    foreach($instruments as $instrument) {
+      if ($instrument["ins_maintenance"]) {
+        $maintenance++;
+        continue;
+      }
+      if ($instrument["ins_inactive"]) {
+        $inactive++;
+        continue;
+      }
+      $active++;
+    }
+    ?>
+      <em>ขณะนี้มีเครื่องมือวิจัย <span class="badge p-2 my-1 badge-success"><?php echo $active; ?> พร้อมใช้งาน</span> <span class="badge p-2 my-1 badge-secondary"><?php echo $inactive; ?> ไม่พร้อมใช้งาน</span> และ <span class="badge p-2 my-1 badge-warning"><?php echo $maintenance; ?> อยู่ในระหว่างบำรุงรักษา</span></em>
+    </div>
+    </div>
+    <div class="d-flex align-items-right justify-content-end">
+      <a href="<?php echo base_url(); ?>instruments/create" class="btn btn-primary ml-2"><i class="fas fa-plus-circle"></i> เพิ่มเครื่องมือ</a>
     </div>
 
   </div>
   <div class="card-body">
-
     <?php if($this->session->flashdata('message')): ?>
       <div class="form-group">
       <div class="alert alert-<?php echo $this->session->flashdata('type'); ?>"><?php echo $this->session->flashdata('message'); ?></div>
@@ -51,9 +69,9 @@
         <?php foreach($instruments as $instrument) : ?>
           <tr>
             <td><?php echo $instrument["ins_id"];?></td>
-            <td><i class="fas fa-eye<?php echo $instrument["ins_unactive"] ? '-slash' : '';?> text-xs"></i> <a href="<?php echo base_url();?>instruments/view/<?php echo $instrument["ins_id"];?>"><?php echo $instrument["ins_name"];?></a>
+            <td><i class="fas fa-eye<?php echo $instrument["ins_inactive"] ? '-slash' : '';?> text-xs"></i> <a href="<?php echo base_url();?>instruments/view/<?php echo $instrument["ins_id"];?>"><?php echo $instrument["ins_name"];?></a>
             
-            <?php if ($instrument["ins_status"]) : ?>
+            <?php if ($instrument["ins_maintenance"]) : ?>
                 (อยู่ในระหว่างบำรุงรักษา)
             <?php endif; ?>
             
@@ -62,10 +80,13 @@
             <td class="text-center" style="vertical-align: middle;">
 
             <div class="row justify-content-center my-auto">
-            <?php if (!$instrument["ins_status"] && !$instrument["ins_unactive"]) : ?>
-              <h6 ><span class="badge badge-success">พร้อมใช้งาน</span></h6>
+            <?php if ($instrument["ins_maintenance"]) : ?>
+              <h6 ><span class="badge p-2 m-1 badge-warning">อยู่ในระหว่างบำรุงรักษา</span></h6>
+            <?php elseif ($instrument["ins_inactive"]):?>
+              <h6 ><span class="badge p-2 m-1 badge-secondary">ไม่พร้อมใช้งาน</span></h6>
             <?php else:?>
-              <h6><span class="badge badge-secondary">ไม่พร้อมใช้งาน</span></h6>
+            
+              <h6><span class="badge p-2 m-1 badge-success">พร้อมใช้งาน</span></h6>
             <?php endif; ?>
             </div>
 

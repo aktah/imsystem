@@ -4,7 +4,7 @@
         public function list($search = NULL)
         {
             /*if (!$showAll) {
-                $this->db->where('ins_status = 1');
+                $this->db->where('ins_maintenance = 1');
             }*/
             if ($search !== NULL) {
                 $this->db->like('ins_name', $search, 'both'); 
@@ -98,8 +98,8 @@
                 'ins_name' => $this->input->post('name'),
                 'ins_description' => $this->input->post('details'),
                 'ins_store' => $this->input->post('instrument_storage') == 0 ? NULL : $this->input->post('instrument_storage'),
-                'ins_status' => $this->input->post('status') !== NULL ? true : false,
-                'ins_unactive' => $this->input->post('unactive') !== NULL ? true : false,
+                'ins_maintenance' => $this->input->post('status') !== NULL ? true : false,
+                'ins_inactive' => $this->input->post('unactive') !== NULL ? true : false,
                 'image_token' => $this->input->post('token'),
                 'ins_updatedAt' => $now
             );
@@ -119,8 +119,8 @@
             $data = array(
                 'ins_name' => $this->input->post('name'),
                 'ins_description' => $this->input->post('details'),
-                'ins_status' => $this->input->post('status') !== NULL ? true : false,
-                'ins_unactive' => $this->input->post('unactive') !== NULL ? true : false,
+                'ins_maintenance' => $this->input->post('status') !== NULL ? true : false,
+                'ins_inactive' => $this->input->post('unactive') !== NULL ? true : false,
                 'ins_store' => $this->input->post('instrument_storage') == 0 ? NULL : $this->input->post('instrument_storage'),
                 'image_token' => $this->input->post('token'),
             );

@@ -36,7 +36,7 @@
 
           </div>
 
-          <?php if($instruments['ins_status'] == 0 && $instruments['ins_unactive'] == 0) : ?>
+          <?php if($instruments['ins_maintenance'] == 0 && $instruments['ins_inactive'] == 0) : ?>
 
           <div class="col-lg-6 ">
             <div id='calendar'></div>
@@ -68,7 +68,7 @@
           <div class="my-3 justify-content-center">
             <button type="button" id="rentConfirm" class="btn btn-primary">จองใช้เครื่องมือ</button>
           </div>
-          <?php elseif($instruments['ins_status'] == 1 && $instruments['ins_unactive'] == 0) : ?>
+          <?php elseif($instruments['ins_maintenance'] == 1 && $instruments['ins_inactive'] == 0) : ?>
             <div class="col-lg-12 text-center">
               <h2 class="text-warning">เครื่องมือวิจัยนี้อยู่ในระหว่างบำรุงรักษา</h2>
             </div>
