@@ -80,12 +80,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // -----------------------------------------------------------------
 
   var calendar = new Calendar(calendarEl, {
-    plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
+    plugins: [ 'interaction', 'dayGrid' ],
     timeZone: 'Asia/Bangkok',
     locale: 'th',
     editable: true,
     droppable: true,
     eventOverlap: false,
+    allDayDefault: false,
     events: data,
       /*{ // this object will be "parsed" into an Event Object
         title: 'The Title', // a property!

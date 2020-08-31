@@ -18,13 +18,13 @@
         public function getMemberRole($username) {
             $this->db->select('member_role');
             $query = $this->db->get_where('members', array('member_name' => $username));
-            return $query->row_array()['member_role'];
+            return intval($query->row_array()['member_role']);
         }
 
         public function getMemberRoleByID($id) {
             $this->db->select('member_role');
             $query = $this->db->get_where('members', array('member_id' => $id));
-            return $query->row_array()['member_role'];
+            return intval($query->row_array()['member_role']);
         }
 
         public function getTokenByUsername($username,$expired) {
@@ -64,9 +64,6 @@
         }
 
         public function hasFlags($flags, $value) {
-            if (($flags & $value) == $value) {
-                return true;
-            }
-            return false;
+            return ($flags & $value);
         }
 	}

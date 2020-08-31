@@ -91,6 +91,13 @@ defined('USER_ROLES')      OR define('USER_ROLES', Array(
     'ADMIN' =>  4   // ผู้ดูแลระบบ
 ));
 
+defined('USER_ROLE_DETAILS')      OR define('USER_ROLE_DETAILS', Array(
+    'USER' =>   'ผู้ใช้',          // ผู้ใช้บริการ
+    'MOD' =>    'ผู้ดูแลเครื่องมือ',  // ผู้ดูแลเครื่องมือ
+    'STAFF' =>  'เจ้าหน้าที่',      // เจ้าหน้าที่
+    'ADMIN' =>  'ผู้ดูแลระบบ'      // ผู้ดูแลระบบ
+));
+
 defined('USER_PERMISSION')      OR define('USER_PERMISSION', Array(
     'MANAGE_SERVICE' => 1,      // เพิ่ม/แก้ไข/ค้นหาและแสดง ข้อมูลการเข้าใช้บริการ
     'CANCEL_SERVICE' => 2,      // ยกเลิกข้อมูลการเข้าใช้บริการ

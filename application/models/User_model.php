@@ -50,6 +50,26 @@
             return $this->db->on_duplicate('member_upload', $data);
         }
 
+        public function member_changepass() {
+
+            if ($this->input->post('confpassword') != NULL && $this->input->post('password') != $this->input->post('confpassword')) {
+                return false;
+            }
+
+            $hashed_password = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
+            $now = date("Y-m-d H:i:s");
+
+            $data = array(
+                'member_password' => $hashed_password,
+                'member_changepass' => false,
+                'updated_at' => $now
+            );
+
+            $this->db->where('member_id', $this->input->post('id'));
+            return $this->db->update('members', $data);
+
+        }
+
         public function member_update() {
 
             $roles = $this->input->post("roles");

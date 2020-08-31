@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
     editable: false,
     droppable: false,
     eventOverlap: false,
-    allDayDefault: true,
+    allDayDefault: false,
 
     eventClick: function(info) {
 

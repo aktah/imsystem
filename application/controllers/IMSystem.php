@@ -7,9 +7,13 @@
 			if(!$this->authCookie_model->isLoggedIn() && $this->uri->segment(2) != 'login' && $this->uri->segment(2) != 'frmLogin') {
 				redirect('imsystem/login');
 			}
+
+			if($this->session->userdata('changepwd')) {
+				redirect('users/changepass');
+			}
 		}
 
-		public function index(){
+		public function index() {
 			$data['user'] = $this->user_model->details($this->session->userdata('member_id'));
 
 			$this->load->model("booking_model");
@@ -117,6 +121,11 @@
 
 					$this->session->set_userdata(array("member_id" => $user["member_id"]));
 
+					if ($user['member_changepass'] != 0) {
+						$this->session->set_userdata(array("changepwd" => true));
+						redirect('users/changepass');
+					}
+					
 					if ($this->input->post('remember') !== NULL) {
 
 						$current_time = time();
@@ -145,6 +154,7 @@
 					} else {
 						$this->util_model->clearAuthCookie();
 					}
+
 					redirect();
 				} else {
 					$this->session->set_flashdata('message', "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!");

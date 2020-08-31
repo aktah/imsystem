@@ -7,6 +7,10 @@
 			if(!$this->authCookie_model->isLoggedIn()) {
 				redirect('imsystem/login');
 			}
+
+			if($this->session->userdata('changepwd')) {
+				redirect('users/changepass');
+			}
 		}
 		
 		public function add() {	

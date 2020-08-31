@@ -59,28 +59,56 @@
           <span>โปรไฟล์</span></a>
       </li>
 
-      <?php if ($this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) : ?>
+      <?php 
+      $flags = $this->auth_model->getMemberRoleByID($this->session->userdata('member_id'));
+
+      $authorized = false;
+      $authorized_user = false;
+      $authorized_instrument = false;
+
+      if ($this->auth_model->hasFlags($flags, USER_ROLES['ADMIN'])) {
+        $authorized = true;
+        $authorized_user = true;
+        $authorized_instrument = true;
+      }
+
+      if ($this->auth_model->hasFlags($flags, USER_ROLES['STAFF'])) {
+        $authorized = true;
+        $authorized_user = true;
+      }
+
+      if ($this->auth_model->hasFlags($flags, USER_ROLES['MOD'])) {
+        $authorized = true;
+        $authorized_instrument = true;
+      }
+
+      ?>
+
+      <?php if ($authorized) : ?>
 
       <!-- Divider -->
       <hr class="sidebar-divider">
 
       <!-- Heading -->
       <div class="sidebar-heading">
-        ผู้ดูแลระบบ
+        การเข้าถึง
       </div>
 
-      <!-- Nav Item - Pages Collapse Menu -->
+      <?php if ($authorized_user) : ?>
       <li class="nav-item <?php echo $this->uri->segment(1) == 'users' ? 'active' : '';?>">
         <a class="nav-link" href="<?php echo base_url();?>users">
           <i class="fas fa-fw fa-users"></i>
-          <span>จัดการผู้ใช้</span></a>
+          <span>ผู้ใช้</span></a>
       </li>
+      <?php endif; ?>
 
+      <?php if ($authorized_instrument) : ?>
       <li class="nav-item <?php echo $this->uri->segment(1) == 'instruments' ? 'active' : '';?>">
         <a class="nav-link" href="<?php echo base_url();?>instruments">
           <i class="fas fa-fw fa-tools"></i>
           <span>เครื่องมือวิจัย</span></a>
       </li>
+      <?php endif; ?>
 
       <?php endif; ?>
       
@@ -272,7 +300,7 @@
                 <?php $data = $this->auth_model->getMemberByID($this->session->userdata('member_id')); ?>
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $data["member_name"]; ?></span>
                 <?php if (!empty($data["member_profile"])) : ?>
-                <img class="img-profile rounded-circle" src="<?php echo base_url() . "assets/uploads" . $data["member_profile"]; ?>">
+                <img class="img-profile rounded-circle" src="<?php echo base_url() . "assets/uploads" . $data["member_profile"]; ?>" onerror="this.onerror=null; this.src='<?php echo base_url() ?>assets/images/NO_IMG_600x600.png'">
                 <?php endif; ?>
               </a>
               <!-- Dropdown - User Information -->

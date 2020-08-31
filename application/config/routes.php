@@ -2,6 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['users'] = 'users/index';
+$route['users/changepass'] = 'users/changepass';
+
 $route['instruments'] = 'instruments/index';
 $route['booking'] = 'booking/index';
 

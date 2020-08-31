@@ -7,10 +7,14 @@
 			if(!$this->authCookie_model->isLoggedIn()) {
 				redirect('imsystem/login');
 			}
+
+			if($this->session->userdata('changepwd')) {
+				redirect('users/changepass');
+			}
 		}
 
 		public function index() {
-			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) {
+			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['MOD'] | USER_ROLES['ADMIN'])) {
 				redirect("imsystem");
 				return;
 			}
@@ -37,7 +41,7 @@
 		}
 
 		public function view($id) {
-			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) {
+			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['MOD'] | USER_ROLES['ADMIN'])) {
 				redirect("imsystem");
 				return;
 			}
@@ -57,7 +61,7 @@
 		}
 
 		public function create() {
-			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) {
+			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['MOD'] | USER_ROLES['ADMIN'])) {
 				redirect("imsystem");
 				return;
 			}
@@ -206,7 +210,7 @@
 			// is exists
 			foreach ($event as $e) {
 
-				$result = $this->booking_model->isExists($instumentID, $e['startStr'], $e['endStr']);
+				$result = $this->booking_model->isExists($instumentID, $e['start'], $e['end']);
 
 				if ($result->num_rows()) {
 					$value = array(

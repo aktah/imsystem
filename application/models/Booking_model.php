@@ -29,8 +29,12 @@
 		}
 
         public function isExists($instrumentID, $startDate, $endDate) {
-			$this->db->where('startDate >=', $startDate);
-			$this->db->where('endDate <=', $endDate);
+
+			$start = new DateTime($startDate);
+			$end = new DateTime($endDate);
+
+			$this->db->where('startDate >=', $start->format('Y-m-d H:i:s'));
+			$this->db->where('endDate <=', $end->format('Y-m-d H:i:s'));
 			$this->db->where('instrument_id', $instrumentID);
 			return $this->db->get('rent_range');
 		}
@@ -41,11 +45,15 @@
 			$rent = $this->db->insert_id();
 
 			foreach ($event as $e) {
+
+				$start = new DateTime($e['start']);
+				$end = new DateTime($e['end']);
+
 				$data = array(
 					'id' => $rent,
 					'instrument_id' => $instrumentID,
-					'startDate' => $e['startStr'],
-					'endDate' => $e['endStr']
+					'startDate' => $start->format('Y-m-d H:i:s'),
+					'endDate' => $end->format('Y-m-d H:i:s')
 				);
 				$this->db->insert('rent_range', $data);
 			}

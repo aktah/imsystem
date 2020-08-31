@@ -96,7 +96,7 @@
               <div class="form-group row" style="border-bottom: 1px dotted #777;">
                   <h4>สถานะและตั้งค่า</h4>
               </div>
-
+              <?php if ($this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) : ?>
               <div class="form-group row">
                 <div class="col-sm-2">บทบาท</div>
                 <div class="col-sm-10">
@@ -130,6 +130,7 @@
 
                 </div>
               </div>
+              <?php endif;?>
         </div>
 
         <div class="form-group">
@@ -137,12 +138,14 @@
           <div class="form-group row">
             <div class="col-sm-2">การตั้งค่า</div>
             <div class="col-sm-10">
+            <?php if ($this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) : ?>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="user_active" name="user_active" <?php echo ($this->input->post("user_active") !== NULL) ? ("checked") : (""); ?>>
                 <label class="form-check-label" for="user_active">
                   เปิดใช้งาน
                 </label>
               </div>
+            <?php endif; ?>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="user_changepass" name="user_changepass" <?php echo ($this->input->post("user_changepass") !== NULL) ? ("checked") : (""); ?>>
                 <label class="form-check-label" for="user_changepass">

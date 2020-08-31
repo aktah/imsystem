@@ -7,11 +7,15 @@
 			if(!$this->authCookie_model->isLoggedIn()) {
 				redirect('imsystem/login');
 			}
+
+			if($this->session->userdata('changepwd') && $this->uri->segment(2) != 'changepass' && $this->uri->segment(2) != 'changepassword') {
+				redirect('users/changepass');
+			}
 		}
 		
 		public function index() {
 
-			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) {
+			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['STAFF'] | USER_ROLES['ADMIN'])) {
 				redirect("imsystem");
 				return;
 			}
@@ -23,9 +27,52 @@
 			$this->load->view('templates/footer');
 		}
 
+		public function changepassword() {
+			
+			$this->form_validation->set_rules('password', 'รหัสผ่าน', 'required');
+			$this->form_validation->set_rules('confpassword', 'ยืนยันรหัสผ่าน', 'required');
+
+			if($this->form_validation->run() === FALSE){
+
+				$data['user'] = $this->user_model->details($this->session->userdata('member_id'));
+
+				$this->load->view('templates/header');
+				$this->load->view('users/changepass', $data);
+				$this->load->view('templates/footer');
+
+			} else {
+				if ($this->user_model->member_changepass()) {
+
+					$this->session->unset_userdata('changepwd');
+
+					$this->session->set_flashdata('message', "อัปเดตข้อมูลสมาชิกเรียบร้อยแล้ว!");
+					$this->session->set_flashdata('type', "success");
+					
+					redirect("users");
+				}
+				else {
+					$this->session->set_flashdata('message', "รหัสผ่านไม่ตรงกัน!");
+					$this->session->set_flashdata('type', "danger");
+					redirect("users/changepass");
+				}
+			}
+		}
+
+		public function changepass() {
+			$data['user'] = $this->user_model->details($this->session->userdata('member_id'));
+			
+			if ($data['user']['member_changepass'] == 0) {
+				redirect('users');
+			}
+
+			$this->load->view('templates/header');
+			$this->load->view('users/changepass', $data);
+			$this->load->view('templates/footer');
+		}
+
 		public function view($id) {
 
-			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) {
+			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['STAFF'] | USER_ROLES['ADMIN'])) {
 				redirect("imsystem");
 				return;
 			}
@@ -44,7 +91,7 @@
 
 		public function create() {
 			
-			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) {
+			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['STAFF'] | USER_ROLES['ADMIN'])) {
 				redirect("imsystem");
 				return;
 			}

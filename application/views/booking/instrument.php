@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
     editable: true,
     droppable: true,
     eventOverlap: false,
-    allDayDefault: true,
+    allDayDefault: false,
     events: data,
       /*{ // this object will be "parsed" into an Event Object
         title: 'The Title', // a property!
@@ -188,9 +188,23 @@ document.addEventListener('DOMContentLoaded', function() {
     //    console.log(calendar.getEvents()[i].start, calendar.getEvents()[i].end);
     //  }
     //}
+
+    /* 
+    
+      var d = new Date(targetEvent.end);
+      d.setDate(d.getDate() - 1);
+      d = new Date(d.setHours(23, 59, 59));
+      targetEvent.setDates(targetEvent.start, d, true);
+    */
     let data = calendar.getEvents().filter(c => {
       return c.id != -1;
     }).map(c => {
+
+      var d = new Date(c.end);
+      d.setDate(d.getDate() - 1);
+      d = new Date(d.setHours(23, 59, 59));
+      c.setDates(c.start, d, true);
+
       return { start: c.start.toISOString(), end: c.end != null ? c.end.toISOString() : c.start.toISOString(), id: c.id };
     });
 
@@ -208,15 +222,9 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.start != e.end) {
         let end = new Date(e.end);
         msg += dayNames[start.getDay()]+" "+start.getDate()+" "+monthNamesThai[start.getMonth()]+" "+ start.getFullYear()+" - "+ dayNames[end.getDay()]+" "+ end.getDate()+" "+monthNamesThai[end.getMonth()]+" "+ end.getFullYear() + "\n";
-      
-        e.startStr = new Date(e.start).toISOString().split('T')[0];
-        e.endStr = new Date(e.end).toISOString().split('T')[0];
       }
       else {
         msg += dayNames[start.getDay()]+" "+start.getDate()+" "+monthNamesThai[start.getMonth()]+" "+ start.getFullYear() + "\n";
-
-        e.startStr = new Date(e.start).toISOString().split('T')[0];
-        e.endStr = e.startStr;
       }
     });
 
