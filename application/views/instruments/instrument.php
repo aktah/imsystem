@@ -52,7 +52,7 @@
                   <div class="col-sm-10">
                     <select id="storagePick" class="form-control form-control-sm" name="instrument_storage">
                     <option value='0'>— เลือกสถานที่จัดเก็บ —</option>
-                    <?php foreach($this->instrument_model->storageList() as $storage) : ?>
+                    <?php foreach($this->storage_model->storageList() as $storage) : ?>
                     <option value='<?php echo $storage["storage_id"]; ?>' <?php echo $storage["storage_id"] == $instrument["ins_store"] ? 'selected' : '' ?>><?php echo $storage["storage_name"]; ?></option>
                     <?php endforeach; ?>
                     <option value='-1'>— เพิ่มใหม่ —</option>
@@ -64,15 +64,15 @@
                   <label class="col-sm-2 col-form-label text-md-right">ผู้ดูแล:</label>
                   <div class="col-sm-10">
                   <div class="col-lg-12">ผู้ดูแลเครื่องมือวิจัยนี้</div>
-                  <div class="col-lg-3">
+
                   <ul id="staff" style="list-style-type:none;">
                     <?php if ($attendant) : ?>
                       <?php foreach ($attendant as $att) : ?>
-                        <li id="staffList" data-id="<?php echo $att["member_id"]; ?>"><?php echo (!empty($att["member_fullname"])) ? $att["member_fullname"]. " (". $att["member_name"] .")" : $att["member_name"]; ?> <i name="removeStaff" class="fa fa-trash fa-xs float-right"></i></li>
+                        <li id="staffList" data-id="<?php echo $att["member_id"]; ?>"><i name="removeStaff<?php echo $att["member_id"]; ?>" class="fa fa-trash fa-xs mr-2"></i> <?php echo (!empty($att["member_fullname"])) ? $att["member_fullname"]. " (". $att["member_name"] .")" : $att["member_name"]; ?></li>
                       <?php endforeach; ?>
                     <?php endif; ?>
                   </ul> 
-                  </div>
+ 
                   <hr>
                   <div class="form-inline">
                   <select class="form-control form-control-sm mr-2" id="instrument_attendant">
@@ -95,7 +95,7 @@
                     <?php endforeach; ?>
                   </select>
                   <div class="form-group">
-                    <button type="button" class="btn btn-primary btn-xs" id="addStaff">เพิ่ม</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="addStaff">เพิ่ม</button>
                   </div>
                   </div>
                   </div>
@@ -172,7 +172,7 @@
 
 <form id="addStorageForm">
 <!-- Modal -->
-<div class="modal fade" id="addStorage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addStorageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       
@@ -187,6 +187,8 @@
 
           <div class="alert d-none"></div>
 
+          <input type="hidden" class='form-control' name="url" value="<?php echo base_url(); ?>"/>
+                       
           <div class="form-group">
             <input type="text" class='form-control' name="storage_name" placeholder="ชื่อสถานที่" /> 
           </div>

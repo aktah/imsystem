@@ -6,6 +6,10 @@ $route['users/changepass'] = 'users/changepass';
 
 $route['instruments'] = 'instruments/index';
 $route['booking'] = 'booking/index';
+$route['storage'] = 'storage/index';
+$route['storage/(:num)'] = 'storage/lookup/$1';
+
+$route['instruments/saveState'] = 'instruments/saveState';
 
 // หน้าแรก
 $route['default_controller'] = 'imsystem/index';

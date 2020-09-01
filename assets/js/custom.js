@@ -7,14 +7,15 @@ $( "#addStorageForm" ).submit(function( event ) {
     var att = $("select[name=storage_attendant] option:selected").val();
 
     $.ajax({
-        url: "../storage/add",
+        url: $("input[name=url]").val() + "storage/add",
         type: "post",
         dataType: "json",
         data: 'storage_name=' + name + '&',
             success: function (response) {
 
+                var alertTag = $('.alert');
+
                 if (response.type == 'danger') {
-                    var alertTag = $('.alert');
                     if (alertTag.hasClass('d-none')) {
                         alertTag.removeClass('d-none');
                     }
@@ -24,7 +25,7 @@ $( "#addStorageForm" ).submit(function( event ) {
                     return;
                 }
 
-                $('#addStorage').modal('hide');
+                $('#addStorageModal').modal('hide');
 
                 if (!alertTag.hasClass('d-none')) {
                     alertTag.text('');
@@ -33,7 +34,11 @@ $( "#addStorageForm" ).submit(function( event ) {
                         alertTag.removeClass('alert-danger');
                     }
                 }
-                
+
+                if (response.type == 'success') {
+                    const data = JSON.parse(response.data);
+                    $("#storagePick option[value='-1']").before(`<option value='${data.id}' selected>${data.name}</option>`);
+                }
             },
             error: function (err) {
                 console.log(err);
@@ -43,7 +48,7 @@ $( "#addStorageForm" ).submit(function( event ) {
 
 $( "#storagePick" ).change(function() {
     if ($(this).val() == -1) {
-        $('#addStorage').modal('show');
+        $('#addStorageModal').modal('show');
         if (!$('.alert').hasClass('d-none')) {
             $('.alert').addClass('d-none');
         }
@@ -371,8 +376,8 @@ function OnStaffAdd() {
 
             let staffList = $("#staff");
             staffList.append(`<li id="staffList" data-id="${value.id}">${value.name}</li>`);
-            $('#staffList[data-id="' + value.id + '"').append(` <i name="removeStaff" class="fa fa-trash fa-xs float-right"></i>`);
-            $("#staffList i[name=removeStaff]").on('click', OnStaffRemove);
+            $('#staffList[data-id="' + value.id + '"').prepend(` <i name="removeStaff${value.id}" class="fa fa-trash fa-xs mr-2"></i>`);
+            $("#staffList i[name=removeStaff" + value.id + "]").on('click', OnStaffRemove);
         }
     }
 }
@@ -383,13 +388,10 @@ $(document).ready(function() {
          $('.modal').modal('hide');
     });
 
-    $('i[name=removeStaff]').on('click', OnStaffRemove);
+    $('i[name^=removeStaff]').on('click', OnStaffRemove);
     $('#addStaff').on('click', OnStaffAdd);
-
     $("#formInstrument").submit(function(e) {
 
-        // e.preventDefault();
-    
         $(this).append($("<input>", {
             type: "hidden",
             name: "addStaff",
@@ -401,19 +403,6 @@ $(document).ready(function() {
             name: "removeStaff",
             value: JSON.stringify(removeStaff)
         }));
-
-        /*var form = $(this);
-        var url = form.attr('action');
-        
-        $.ajax({
-          type: "POST",
-          url: url,
-          data: form.serialize() + "&removeStaff=" + JSON.stringify(removeStaff) + "&addStaff=" + JSON.stringify(addStaff), // serializes the form's elements.
-          success: function()
-          {
-
-          }
-        });*/
 
     });
 
@@ -446,4 +435,92 @@ $(document).ready(function() {
 $(document).on('click', '[data-toggle="lightbox"]', function(event) {
     event.preventDefault();
     $(this).ekkoLightbox();
+});
+
+// Storage
+var removeStorage = [];
+var addStorage = [];
+
+function OnStorageRemove() {
+
+    let targetElement = $(this.parentElement);
+    const storageDBID = targetElement.attr('data-id');
+    targetElement.remove();
+
+    let idx = removeStorage.findIndex((v) => v.id == storageDBID);
+    if (idx == -1) {
+
+        let 
+            isChange = true,
+            isAdded = addStorage.findIndex((v) => v.id == storageDBID)
+        ;
+        const value = { name: targetElement.text().trim(), id: storageDBID, current: isAdded };
+
+        if (isAdded != -1) {
+            if (addStorage[isAdded].current == -1) {
+                isChange = false;
+            }
+            addStorage.splice(isAdded, 1);
+        }
+
+        if (isChange) {
+            removeStorage.push(value);
+        }
+
+        let storageList = $("#store_instrument");
+        storageList.append(`<option value='${value.id}'>${value.name}</option>`);
+    }
+}
+
+function OnStorageAdd() {
+
+    let storageDBID = parseInt($('#store_instrument').val());
+    if (storageDBID > 0) {
+        let idx = addStorage.findIndex((v) => v.id == storageDBID);
+        if (idx == -1) {
+
+            let 
+                isChange = true,
+                isRemoved = removeStorage.findIndex((v) => v.id == storageDBID)
+            ;
+            const value = { name: $("#store_instrument option:selected" ).text().trim(), id: storageDBID, current: isRemoved };
+
+            if (isRemoved != -1) {
+                if (removeStorage[isRemoved].current == -1) {
+                    isChange = false;
+                }
+                removeStorage.splice(isRemoved, 1);
+            }
+
+            if (isChange) {
+                addStorage.push(value);
+            }
+            $("#store_instrument option:selected" ).remove();
+
+            let storageList = $("#storage");
+            storageList.append(`<li id="storageList" data-id="${value.id}">${value.name}</li>`);
+            $('#storageList[data-id="' + value.id + '"').prepend(` <i name="removeStorage${value.id}" class="fa fa-trash fa-xs mr-2"></i>`);
+            $("#storageList i[name=removeStorage" + value.id + "]").on('click', OnStorageRemove);
+        }
+    }
+}
+
+$(document).ready(function() {
+    $('i[name^=removeStorage]').on('click', OnStorageRemove);
+    $('#addStorage').on('click', OnStorageAdd);
+    $("#formStorage").submit(function(e) {
+
+        $(this).append($("<input>", {
+            type: "hidden",
+            name: "addStorage",
+            value: JSON.stringify(addStorage)
+        }));
+
+        $(this).append($("<input>", {
+            type: "hidden",
+            name: "removeStorage",
+            value: JSON.stringify(removeStorage)
+        }));
+
+    });
 });

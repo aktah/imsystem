@@ -42,5 +42,5 @@
                 delete_cookie('random_selector');
             }
         }
-        
+
 	}

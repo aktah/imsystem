@@ -35,13 +35,15 @@
 
 </head>
 
-<body id="page-top">
+<input type="hidden" name="url" value="<?php echo base_url(); ?>" >
+
+<body id="page-top" class="<?php echo $this->session->has_userdata('sideToggle') ? 'sidebar-toggled' : '' ?>">
 
   <!-- Page Wrapper -->
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion <?php echo $this->session->has_userdata('sideToggle') ? 'toggled' : '' ?>" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo base_url();?>imsystem">
@@ -67,16 +69,19 @@
       $authorized = false;
       $authorized_user = false;
       $authorized_instrument = false;
+      $authorized_storage = false;
 
       if ($this->auth_model->hasFlags($flags, USER_ROLES['ADMIN'])) {
         $authorized = true;
         $authorized_user = true;
         $authorized_instrument = true;
+        $authorized_storage = true;
       }
 
       if ($this->auth_model->hasFlags($flags, USER_ROLES['STAFF'])) {
         $authorized = true;
         $authorized_user = true;
+        $authorized_storage = true;
       }
 
       if ($this->auth_model->hasFlags($flags, USER_ROLES['MOD'])) {
@@ -109,6 +114,14 @@
         <a class="nav-link" href="<?php echo base_url();?>instruments">
           <i class="fas fa-fw fa-tools"></i>
           <span>เครื่องมือวิจัย</span></a>
+      </li>
+      <?php endif; ?>
+
+      <?php if ($authorized_storage) : ?>
+      <li class="nav-item <?php echo $this->uri->segment(1) == 'storage' ? 'active' : '';?>">
+        <a class="nav-link" href="<?php echo base_url();?>storage">
+          <i class="fas fa-fw fa-building"></i>
+          <span>สถานที่จัดเก็บเครื่องมือวิจัย</span></a>
       </li>
       <?php endif; ?>
 

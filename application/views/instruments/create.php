@@ -51,7 +51,7 @@
                   <div class="col-sm-10">
                     <select id="storagePick" class="form-control form-control-sm" name="instrument_storage">
                     <option value='0'>— เลือกสถานที่จัดเก็บ —</option>
-                    <?php foreach($this->instrument_model->storageList() as $storage) : ?>
+                    <?php foreach($this->storage_model->storageList() as $storage) : ?>
                     <option value='<?php echo $storage["storage_id"]; ?>'><?php echo $storage["storage_name"]; ?></option>
                     <?php endforeach; ?>
                     <option value='-1'>— เพิ่มใหม่ —</option>
@@ -80,7 +80,7 @@
                     <?php endforeach; ?>
                   </select>
                   <div class="form-group">
-                    <button type="button" class="btn btn-primary btn-xs" id="addStaff">เพิ่ม</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="addStaff">เพิ่ม</button>
                   </div>
                   </div>
                   </div>
@@ -142,18 +142,17 @@
 
 <div class="form-group row">
     <div class="col-lg-12">
-        <div class="text-center"><button id="saveIntrument" type="submit" class="btn btn-outline-secondary mb-2 mr-sm-2">บันทึก</button> <button type="reset" class="btn btn-outline-secondary mb-2 mr-sm-2">รีเซ็ต</button> <button class="btn btn-outline-secondary mb-2 mr-sm-2">ยกเลิก</button></div>
+        <div class="text-center"><button id="saveIntrument" type="submit" class="btn btn-outline-secondary mb-2 mr-sm-2">บันทึก</button> <button type="reset" class="btn btn-outline-secondary mb-2 mr-sm-2">รีเซ็ต</button> <button type="submit" name="cancel" class="btn btn-outline-secondary mb-2 mr-sm-2">ยกเลิก</button></div>
     </div>
 </div>
 </form>
 
 <form id="addStorageForm">
 <!-- Modal -->
-<div class="modal fade" id="addStorage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addStorageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       
-
         <div class="modal-header">
           <h2 class="modal-title">เพิ่มสถานที่จัดเก็บใหม่</h2>
           <button type="button" class="close close-modal" aria-label="Close" (click)="modal.dismiss()">
@@ -164,6 +163,8 @@
 
           <div class="alert d-none"></div>
 
+          <input type="hidden" class='form-control' name="url" value="<?php echo base_url(); ?>"/>     
+                   
           <div class="form-group">
             <input type="text" class='form-control' name="storage_name" placeholder="ชื่อสถานที่" /> 
           </div>

@@ -14,18 +14,10 @@
             return $query->result_array();
         }
 
-        /*public function getStorageID($id) {
-            $query = $this->db->get_where('store', array('instrument_id'=>$id));
-            $storageId = $query->row_array()['storage_id'];
-            return $storageId ? $storageId : 0;
-        }*/
-
-        /*public function getAttendantID($id) {
-            $this->db->select("members.member_id, members.member_name, members.member_fullname");
-            $this->db->join('members', 'members.member_id = store.attendant');
-            $query = $this->db->get_where('store', array('instrument_id'=>$id));
+		public function notStoreList() {
+            $query = $this->db->get_where('instruments', array("ins_store" => NULL));
             return $query->result_array();
-        }*/
+		}
   
         public function getImages($id, $token) {
             $query = $this->db->get_where('intrument_upload', array('intrument_id'=>$id, 'image_token'=>$token));
@@ -37,24 +29,6 @@
             $this->db->select('*');
             $query = $this->db->get_where('instruments', array('ins_id'=>$id));
             return $query->row_array();
-        }
-
-        public function storageList() {
-            $query = $this->db->get('storage');
-            return $query->result_array();
-        }
-
-        public function storage_add() {
-
-            $storageName = $this->input->post('storage_name');
-
-            $data = array(
-                'storage_name' => $storageName
-            );
-            
-            $insertId =  $this->db->insert('storage', $data);
-
-            return $insertId;
         }
 
         public function getAttendant($instrumentID) {

@@ -3,11 +3,22 @@
 
   // Toggle the side navigation
   $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
+    
     $("body").toggleClass("sidebar-toggled");
     $(".sidebar").toggleClass("toggled");
+
+    let toggle = $(".sidebar").hasClass("toggled") ? true : false;
     if ($(".sidebar").hasClass("toggled")) {
       $('.sidebar .collapse').collapse('hide');
     };
+
+    $.ajax({
+      url: $("input[name=url]").val() + "instruments/saveState",
+      type: "post",
+      dataType: 'json',
+      data: 'toggle=' + toggle
+    });
+
   });
 
   // Close any open menu accordions when window is resized below 768px

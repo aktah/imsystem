@@ -13,6 +13,14 @@
 			}
 		}
 
+		public function saveState() {
+			if ($this->input->post('toggle') == 'true') {
+				$this->session->set_userdata('sideToggle', true);
+			} else {
+				$this->session->unset_userdata('sideToggle');
+			}
+		}
+
 		public function index() {
 			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['MOD'] | USER_ROLES['ADMIN'])) {
 				redirect("imsystem");
@@ -45,6 +53,7 @@
 				redirect("imsystem");
 				return;
 			}
+			$this->load->model("storage_model");
 
 			$data['instrument'] = $this->instrument_model->details($id);
 			$data['attendant'] = $this->instrument_model->getAttendant($data['instrument']['ins_id']);
@@ -65,7 +74,7 @@
 				redirect("imsystem");
 				return;
 			}
-			
+			$this->load->model("storage_model");
 			$this->load->view('templates/header');
 			$this->load->view('instruments/create', array());
 			$this->load->view('templates/footer');
@@ -147,6 +156,11 @@
 		}
 
 		public function add() {	
+
+			if ($this->input->post('cancel') !== NULL) {
+				redirect("instruments");
+			}
+			$this->load->model("storage_model");
 
 			$this->form_validation->set_rules('name', 'ชื่อเครื่องมือวิจัย', 'required');
 			$this->form_validation->set_rules('details', 'รายละเอียด', 'required');
