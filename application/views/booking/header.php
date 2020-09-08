@@ -60,7 +60,13 @@
       <li class="nav-item <?php echo $this->uri->segment(1) == '' || $this->uri->segment(1) == 'imsystem' ? 'active' : '';?>">
         <a class="nav-link" href="<?php echo base_url();?>">
           <i class="fas fa-user"></i>
-          <span>โปรไฟล์</span></a>
+          <span><?php echo $this->lang->line('profile') ?></span></a>
+      </li>
+
+      <li class="nav-item <?php echo $this->uri->segment(1) == 'job' ? 'active' : '';?>">
+        <a class="nav-link" href="<?php echo base_url();?>job">
+          <i class="fas fa-briefcase"></i>
+          <span><?php echo $this->lang->line('job') ?></span></a>
       </li>
 
       <?php 
@@ -98,14 +104,14 @@
 
       <!-- Heading -->
       <div class="sidebar-heading">
-        การเข้าถึง
+      <?php echo $this->lang->line('accession'); ?>
       </div>
 
       <?php if ($authorized_user) : ?>
       <li class="nav-item <?php echo $this->uri->segment(1) == 'users' ? 'active' : '';?>">
         <a class="nav-link" href="<?php echo base_url();?>users">
           <i class="fas fa-fw fa-users"></i>
-          <span>ผู้ใช้</span></a>
+          <span><?php echo $this->lang->line('user'); ?></span></a>
       </li>
       <?php endif; ?>
 
@@ -113,7 +119,7 @@
       <li class="nav-item <?php echo $this->uri->segment(1) == 'instruments' ? 'active' : '';?>">
         <a class="nav-link" href="<?php echo base_url();?>instruments">
           <i class="fas fa-fw fa-tools"></i>
-          <span>เครื่องมือวิจัย</span></a>
+          <span><?php echo $this->lang->line('instrument'); ?></span></a>
       </li>
       <?php endif; ?>
 
@@ -121,7 +127,7 @@
       <li class="nav-item <?php echo $this->uri->segment(1) == 'storage' ? 'active' : '';?>">
         <a class="nav-link" href="<?php echo base_url();?>storage">
           <i class="fas fa-fw fa-building"></i>
-          <span>สถานที่จัดเก็บเครื่องมือวิจัย</span></a>
+          <span><?php echo $this->lang->line('warehouse'); ?></span></a>
       </li>
       <?php endif; ?>
 
@@ -131,14 +137,14 @@
 
       <!-- Heading -->
       <div class="sidebar-heading">
-        บริการ
+        <?php echo $this->lang->line('service'); ?>
       </div>
 
       <!-- Nav Item - Charts -->
       <li class="nav-item <?php echo $this->uri->segment(1) == 'booking' ? 'active' : '';?>">
         <a class="nav-link" href="<?php echo base_url();?>booking">
           <i class="fas fa-calendar"></i>
-          <span>เข้าจองใช้เครื่องมือวิจัย</span></a>
+          <span><?php echo $this->lang->line('book'); ?></span></a>
       </li>
 
       <!-- Divider -->
@@ -169,7 +175,7 @@
           <!-- Topbar Search -->
           <form action="<?php echo base_url(); ?>booking" method="POST" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input id="autoins" type="text" name="search" class="form-control bg-light border-0 small" placeholder="ค้นหาเครื่องมือวิจัย..." aria-label="Search" aria-describedby="basic-addon2">
+              <input id="autoins" type="text" name="search" class="form-control bg-light border-0 small" placeholder="<?php echo $this->lang->line('search_instrument'); ?>" aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
                 <button class="btn btn-primary" type="submit">
                   <i class="fas fa-search fa-sm"></i>
@@ -201,6 +207,25 @@
               </div>
             </li>
 
+            <!-- Language - Messages -->
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-globe fa-fw"></i>
+              </a>
+              <!-- Dropdown - Alerts -->
+              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header">
+                  <?php echo $this->lang->line('change_language'); ?>
+                </h6>
+                <a class="dropdown-item d-flex align-items-center" href="<?php echo base_url("imsystem/switchLang/thai"); ?>">
+                ไทย
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="<?php echo base_url("imsystem/switchLang/english"); ?>">
+                English
+                </a>
+              </div>
+            </li>
+            
             <!-- Nav Item - Alerts -->
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -319,22 +344,18 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="<?php echo base_url(); ?>imsystem">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
+                  <?php echo $this->lang->line('profile'); ?>
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="<?php echo base_url(); ?>users/settings">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Activity Log
+                  <?php echo $this->lang->line('settings'); ?>
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  ออกจากระบบ
+                  <?php echo $this->lang->line('logout'); ?>
                 </a>
               </div>
             </li>

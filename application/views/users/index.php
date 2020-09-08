@@ -1,14 +1,10 @@
-<!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">จัดการผู้ใช้</h1>
-<p class="mb-4">คุณสามารถเรียกดูรายละเอียดผู้ใช้และจัดการได้ที่หน้านี้</p>
-
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
   <div class="card-header py-3 d-flex align-items-center justify-content-between">
-    <h6 class="m-0 font-weight-bold text-primary">รายชื่อผู้ใช้งานระบบ</h6>
+    <h6 class="m-0 font-weight-bold text-primary"><?php echo $this->lang->line('users'); ?></h6>
 
     <div class="d-flex align-items-right">
-      <a href="<?php echo base_url(); ?>users/create" class="btn btn-secondary ml-2"><i class="fas fa-plus-circle"></i> เพิ่มผู้ใช้</a>
+      <a href="<?php echo base_url(); ?>users/create" class="btn btn-secondary ml-2"><i class="fas fa-plus-circle"></i> <?php echo $this->lang->line('add'); ?></a>
     </div>
 
   </div>
@@ -17,18 +13,18 @@
       <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th>ชื่อ</th>
-            <th>คณะ/หน่วยงาน</th>
-            <th>ลงทะเบียนเมื่อ</th>
-            <th>อัปเดตล่าสุด</th>
+            <th><?php echo $this->lang->line('name'); ?></th>
+            <th><?php echo $this->lang->line('organization'); ?></th>
+            <th><?php echo $this->lang->line('created_at'); ?></th>
+            <th><?php echo $this->lang->line('updated_at'); ?></th>
           </tr>
         </thead>
         <tfoot>
           <tr>
-            <th>ชื่อ</th>
-            <th>คณะ/หน่วยงาน</th>
-            <th>ลงทะเบียนเมื่อ</th>
-            <th>อัปเดตล่าสุด</th>
+            <th><?php echo $this->lang->line('name'); ?></th>
+            <th><?php echo $this->lang->line('organization'); ?></th>
+            <th><?php echo $this->lang->line('created_at'); ?></th>
+            <th><?php echo $this->lang->line('updated_at'); ?></th>
           </tr>
         </tfoot>
         <tbody>
@@ -51,3 +47,41 @@
     </div>
   </div>
 </div>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  let lang = "<?php echo $this->session->userdata('site_lang'); ?>";
+  const dataTable_Lang = lang == 'thai' ? {
+    "language": {
+        "sEmptyTable":     "ไม่มีข้อมูลในตาราง",
+        "sInfo":           "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+        "sInfoEmpty":      "แสดง 0 ถึง 0 จาก 0 แถว",
+        "sInfoFiltered":   "(กรองข้อมูล _MAX_ ทุกแถว)",
+        "sInfoPostFix":    "",
+        "sInfoThousands":  ",",
+        "sLengthMenu":     "แสดง _MENU_ แถว",
+        "sLoadingRecords": "กำลังโหลดข้อมูล...",
+        "sProcessing":     "กำลังดำเนินการ...",
+        "sSearch":         "ค้นหา: ",
+        "sZeroRecords":    "ไม่พบข้อมูล",
+        "oPaginate": {
+        "sFirst":    "หน้าแรก",
+        "sPrevious": "ก่อนหน้า",
+        "sNext":     "ถัดไป",
+        "sLast":     "หน้าสุดท้าย"
+        },
+        "oAria": {
+          "sSortAscending":  ": เปิดใช้งานการเรียงข้อมูลจากน้อยไปมาก",
+          "sSortDescending": ": เปิดใช้งานการเรียงข้อมูลจากมากไปน้อย"
+        }
+    }
+  } : {};
+
+  $('#usersTable').dataTable(dataTable_Lang);
+
+});
+
+</script>

@@ -69,7 +69,11 @@
             $now = date("Y-m-d H:i:s");
 
             $data = array(
+                'ins_device' => $this->input->post('device'),
+                'ins_abbre' => $this->input->post('abbre'),
+                'ins_model' => $this->input->post('model'),
                 'ins_name' => $this->input->post('name'),
+                'ins_name_en' => $this->input->post('name_en'),
                 'ins_description' => $this->input->post('details'),
                 'ins_store' => $this->input->post('instrument_storage') == 0 ? NULL : $this->input->post('instrument_storage'),
                 'ins_maintenance' => $this->input->post('status') !== NULL ? true : false,
@@ -91,7 +95,11 @@
         public function instrument_add() {
 
             $data = array(
+                'ins_device' => $this->input->post('device'),
+                'ins_abbre' => $this->input->post('abbre'),
+                'ins_model' => $this->input->post('model'),
                 'ins_name' => $this->input->post('name'),
+                'ins_name_en' => $this->input->post('name_en'),
                 'ins_description' => $this->input->post('details'),
                 'ins_maintenance' => $this->input->post('status') !== NULL ? true : false,
                 'ins_inactive' => $this->input->post('unactive') !== NULL ? true : false,

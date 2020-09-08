@@ -1,6 +1,6 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex align-items-center justify-content-between">
-    <h6 class="m-0 font-weight-bold text-primary"><?php echo $this->lang->line('change_password'); ?></h6>
+    <h6 class="m-0 font-weight-bold text-primary"><?php echo $this->lang->line('settings'); ?></h6>
     </div>
 
     <?php echo form_open_multipart('users/settingsupdate');?>
@@ -27,26 +27,46 @@
                 <div class="col-lg">
 
                     <div class="form-group row">
-                            <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('password'); ?>: </b></label>
+                    <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('username'); ?>:</b></label>
+                    <div class="col-sm-10">
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" value="<?php echo $user["member_name"]; ?>" disabled>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="form-group row">
+
+                        <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('oldpassword'); ?>: </b></label>
+                            <div class="col-sm-10">
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-sm" name="oldpassword" value="">
+                                </div>
+                            </div>
+                        </div>
+
+                     <div class="form-group row">
+                        <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('password'); ?>: </b></label>
                             <div class="col-sm-10">
                                 <div class="form-group">
                                     <input type="password" class="form-control form-control-sm" name="password" value="">
                                 </div>
                             </div>
                         </div>
+
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('confirmpassword'); ?>: </b></label>
+                        <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('confirmpassword'); ?>: </b></label>
                             <div class="col-sm-10">
                                 <div class="form-group">
                                     <input type="password" class="form-control form-control-sm" name="confpassword" value="">
                                 </div>
-                            </div>
+                        </div>
                     </div>
                 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label text-md-right"></label>
                         <div class="col-sm-10">
-                            <button type="submit" name="changepass" class="btn btn-outline-secondary mb-2 mr-sm-2"><?php echo $this->lang->line('change_password'); ?></button>
+                            <button type="submit" name="settings" class="btn btn-outline-secondary mb-2 mr-sm-2"><?php echo $this->lang->line('change_password'); ?></button>
                         </div>
                     </div>
                 </div>

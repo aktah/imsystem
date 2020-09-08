@@ -1,13 +1,9 @@
-<!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">สถานที่จัดเก็บเครื่องมือวิจัย</h1>
-<p class="mb-4">คุณสามารถเรียกดูรายชื่อสถานที่จัดเก็บเครื่องมือวิจัยและรายชื่อเครื่องมือวิจัยที่เกี่ยวข้องทั้งหมดได้ที่นี่</p>
-
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">รายชื่อสถานที่จัดเก็บเครื่องมือวิจัย</h6>
+        <h6 class="m-0 font-weight-bold text-primary"><?php echo $this->lang->line('warehouse'); ?></h6>
 
         <div class="d-flex align-items-right justify-content-end">
-            <a href="<?php echo base_url(); ?>storage/create" class="btn btn-primary ml-2"><i class="fas fa-plus-circle"></i> เพิ่ม</a>
+            <a href="<?php echo base_url(); ?>storage/create" class="btn btn-primary ml-2"><i class="fas fa-plus-circle"></i> <?php echo $this->lang->line('add'); ?></a>
         </div>
     </div>
     <div class="card-body">
@@ -16,15 +12,15 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>ชื่อ</th>
-                <th>จำนวนเครื่องมือวิจัย</th>
+                <th><?php echo $this->lang->line('name'); ?></th>
+                <th><?php echo $this->lang->line('instrument'); ?></th>
             </tr>
             </thead>
             <tfoot>
             <tr>
                 <th>#</th>
-                <th>ชื่อ</th>
-                <th>จำนวนเครื่องมือวิจัย</th>
+                <th><?php echo $this->lang->line('name'); ?></th>
+                <th><?php echo $this->lang->line('instrument'); ?></th>
             </tr>
             </tfoot>
             <tbody>
@@ -41,3 +37,40 @@
         </div>
     </div>
 </div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  let lang = "<?php echo $this->session->userdata('site_lang'); ?>";
+  const dataTable_Lang = lang == 'thai' ? {
+    "language": {
+        "sEmptyTable":     "ไม่มีข้อมูลในตาราง",
+        "sInfo":           "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+        "sInfoEmpty":      "แสดง 0 ถึง 0 จาก 0 แถว",
+        "sInfoFiltered":   "(กรองข้อมูล _MAX_ ทุกแถว)",
+        "sInfoPostFix":    "",
+        "sInfoThousands":  ",",
+        "sLengthMenu":     "แสดง _MENU_ แถว",
+        "sLoadingRecords": "กำลังโหลดข้อมูล...",
+        "sProcessing":     "กำลังดำเนินการ...",
+        "sSearch":         "ค้นหา: ",
+        "sZeroRecords":    "ไม่พบข้อมูล",
+        "oPaginate": {
+        "sFirst":    "หน้าแรก",
+        "sPrevious": "ก่อนหน้า",
+        "sNext":     "ถัดไป",
+        "sLast":     "หน้าสุดท้าย"
+        },
+        "oAria": {
+          "sSortAscending":  ": เปิดใช้งานการเรียงข้อมูลจากน้อยไปมาก",
+          "sSortDescending": ": เปิดใช้งานการเรียงข้อมูลจากมากไปน้อย"
+        }
+    }
+  } : {};
+
+  $('#instrumentsTable').dataTable(dataTable_Lang);
+  
+});
+
+</script>

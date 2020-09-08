@@ -68,13 +68,13 @@
 
 			if (!$id) {
 				$data = array(
-					"message"=> "เกิดข้อผิดพลาดบางอย่าง !",
+					"message"=> $this->lang->line('alert_add_fail'),
 					"type" => "danger",
 					"data" => null
 				);
 			} else {
 				$data = array(
-					"message"=> "สำเร็จ !",
+					"message"=> $this->lang->line('alert_add_success'),
 					"type" => "success",
 					"data" => json_encode(array("id" => $id, "name" => $name))
 				);

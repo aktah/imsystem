@@ -8,7 +8,7 @@
 
 <div class="card shadow mb-4">
   <div class="card-header py-3 d-flex align-items-center justify-content-between">
-    <h6 class="m-0 font-weight-bold text-primary">ข้อมูลสมาชิก</h6>
+    <h6 class="m-0 font-weight-bold text-primary"><?php echo $this->lang->line('profile'); ?></h6>
   </div>
 
   <div class="card-body">
@@ -44,7 +44,7 @@
             </div>
             <div class="col-lg">
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right"><b>ชื่อผู้ใช้: <span class="text-danger">*</span></b></label>
+                  <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('username'); ?>: <span class="text-danger">*</span></b></label>
                   <div class="col-sm-10">
                       <div class="form-group">
                           <input type="text" class="form-control form-control-sm" name="username" value="<?php echo $this->input->post("username"); ?>">
@@ -52,7 +52,7 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right"><b>รหัสผ่าน: <span class="text-danger">*</span></b></label>
+                  <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('password'); ?>: <span class="text-danger">*</span></b></label>
                   <div class="col-sm-10">
                       <div class="form-group">
                           <input type="password" class="form-control form-control-sm" name="password" value="<?php echo $this->input->post("password"); ?>">
@@ -60,13 +60,13 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right"><b>อีเมล: <span class="text-danger">*</span></b></label>
+                  <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('email'); ?>: <span class="text-danger">*</span></b></label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control form-control-sm" name="email" placeholder="ต.ย. name@mydomain.com" value="<?php echo $this->input->post("email"); ?>">
+                    <input type="text" class="form-control form-control-sm" name="email" placeholder="<?php echo $this->lang->line('eg'); ?> name@mydomain.com" value="<?php echo $this->input->post("email"); ?>">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right">ชื่อ-นามสกุล</label>
+                  <label class="col-sm-2 col-form-label text-md-right"><?php echo $this->lang->line('full_name'); ?></label>
                   <div class="col-sm-10">
                       <div class="form-group">
                           <input type="text" class="form-control form-control-sm" name="fullname" value="<?php echo $this->input->post("fullname"); ?>">
@@ -74,7 +74,7 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right">สังกัด (หน่วยงาน)</label>
+                  <label class="col-sm-2 col-form-label text-md-right"><?php echo $this->lang->line('organization'); ?></label>
                   <div class="col-sm-10">
                       <div class="form-group">
                           <input type="text" class="form-control form-control-sm" name="affiliation" value="<?php echo $this->input->post("affiliation"); ?>">
@@ -82,7 +82,7 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right">เบอร์โทรศัพท์</label>
+                  <label class="col-sm-2 col-form-label text-md-right"><?php echo $this->lang->line('phonenumb'); ?></label>
                   <div class="col-sm-10">
                     <input type="text" class="form-control form-control-sm" name="phonenumb" value="<?php echo $this->input->post("phonenumb"); ?>">
                   </div>
@@ -94,37 +94,37 @@
         <div class="form-group">
 
               <div class="form-group row" style="border-bottom: 1px dotted #777;">
-                  <h4>สถานะและตั้งค่า</h4>
+                  <h4><?php echo $this->lang->line('options_and_settings'); ?></h4>
               </div>
               <?php if ($this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) : ?>
               <div class="form-group row">
-                <div class="col-sm-2">บทบาท</div>
+                <div class="col-sm-2"><?php echo $this->lang->line('roles'); ?></div>
                 <div class="col-sm-10">
                   <div class="form-check disabled">
                     <input class="form-check-input" type="checkbox" checked disabled>
                     <label class="form-check-label">
-                      ผู้ใช้
+                    <?php echo $this->lang->line('user'); ?>
                     </label>
                   </div>
 
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="roles_mod" name="roles_mod" <?php echo ($this->input->post("roles_mod") !== NULL) ? ("checked") : (""); ?>>
                     <label class="form-check-label" for="roles_mod">
-                      ผู้ดูแลเครื่องมือ
+                    <?php echo $this->lang->line('mod'); ?>
                     </label>
                   </div>
   
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="roles_staff" name="roles_staff" <?php echo ($this->input->post("roles_staff") !== NULL) ? ("checked") : (""); ?>>
                     <label class="form-check-label" for="roles_staff">
-                      เจ้าหน้าที่
+                    <?php echo $this->lang->line('staff'); ?>
                     </label>
                   </div>
 
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="roles_admin" name="roles_admin" <?php echo ($this->input->post("roles_admin") !== NULL) ? ("checked") : (""); ?>>
                     <label class="form-check-label" for="roles_admin">
-                      ผู้ดูแลระบบ
+                    <?php echo $this->lang->line('admin'); ?>
                     </label>
                   </div>
 
@@ -136,20 +136,20 @@
         <div class="form-group">
           
           <div class="form-group row">
-            <div class="col-sm-2">การตั้งค่า</div>
+            <div class="col-sm-2"><?php echo $this->lang->line('settings'); ?></div>
             <div class="col-sm-10">
             <?php if ($this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['ADMIN'])) : ?>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="user_active" name="user_active" <?php echo ($this->input->post("user_active") !== NULL) ? ("checked") : (""); ?>>
                 <label class="form-check-label" for="user_active">
-                  เปิดใช้งาน
+                <?php echo $this->lang->line('active'); ?>
                 </label>
               </div>
             <?php endif; ?>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="user_changepass" name="user_changepass" <?php echo ($this->input->post("user_changepass") !== NULL) ? ("checked") : (""); ?>>
                 <label class="form-check-label" for="user_changepass">
-                  เปลี่ยนรหัสผ่านหลังเข้าสู่ระบบ
+                <?php echo $this->lang->line('change_password_after_login'); ?>
                 </label>
               </div>
             </div>
@@ -161,7 +161,7 @@
 
 <div class="form-group row">
     <div class="col-lg-12">
-        <div class="text-center"><button type="submit" class="btn btn-outline-secondary mb-2 mr-sm-2">เพิ่ม</button> <button type="reset" class="btn btn-outline-secondary mb-2 mr-sm-2">รีเซ็ต</button> <button class="btn btn-outline-secondary mb-2 mr-sm-2">ยกเลิก</button></div>
+        <div class="text-center"><button type="submit" class="btn btn-outline-secondary mb-2 mr-sm-2"><?php echo $this->lang->line('create'); ?></button> <button type="reset" class="btn btn-outline-secondary mb-2 mr-sm-2"><?php echo $this->lang->line('reset'); ?></button> <button type="submit" name="cancel" class="btn btn-outline-secondary mb-2 mr-sm-2"><?php echo $this->lang->line('cancel'); ?></button></div>
     </div>
 </div>
 

@@ -29,11 +29,51 @@
 
           </div>
 
-          <div class="col-lg-12 text-center">
-                <h3><?php echo $instruments['ins_name']; ?></h3>
-                <p><?php echo $instruments['ins_description']; ?></p>
-          </div>
 
+          <div class="form-group">
+            <div class="form-group row">
+                <div class="col-lg">
+                  <div class="form-group">
+                    <div class="row">
+                      <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('device_code'); ?></b></label>
+                      <div class="col-sm-10 col-form-label">
+                              <?php echo $instruments["ins_device"]; ?>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('name'); ?> (TH)</b></label>
+                      <div class="col-sm-10 col-form-label">
+                            <?php echo $instruments["ins_name"]; ?>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('name'); ?> (EN)</b></label>
+                      <div class="col-sm-10 col-form-label">
+                              <?php echo $instruments["ins_name_en"]; ?>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('abbreviation'); ?></b></label>
+                      <div class="col-sm-10 col-form-label">
+                          <?php echo $instruments["ins_abbre"]; ?>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('model'); ?></b></label>
+                      <div class="col-sm-10 col-form-label">
+                          <?php echo $instruments["ins_model"]; ?>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('description'); ?></b></label>
+                      <div class="col-sm-10 col-form-label">
+                        <?php echo $instruments["ins_description"]; ?>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <?php if($instruments['ins_maintenance'] == 0 && $instruments['ins_inactive'] == 0) : ?>
@@ -46,21 +86,20 @@
             <div class="form-group col-lg-12 my-5">
               <div class="text-center" id='external-events'>
                 <p>
-                  <h2>Drag & Drop</h2>
-                  <small class="text-mute">ลากและวางไปที่ปฏิทิน</small>
+                  <h2><?php echo $this->lang->line('drag_and_drop'); ?></h2>
                 </p>
-                <p class="text-left">Event(s) <small>เหตุการณ์</small></p>
+                <p class="text-left"><?php echo $this->lang->line('events'); ?></p>
                 <div class='text-left fc-event' data-event='{"title": "<?php echo $instruments['ins_name']; ?> #<?php echo $instruments['ins_id']; ?>"}'><?php echo $instruments['ins_name']; ?></div>
               </div>
-              <small class="text-info">แนะนำ: คลิกซ้ายที่เหตุการณ์หนึ่งครั้งเพื่อยกเลิก</small>
+              <small class="text-info"><?php echo $this->lang->line('event_book_info'); ?></small>
             </div>
             <div class="form-group col-lg-12 my-5">
-              <h4>รายละเอียดเพิ่มเติม</h4>
+              <h4><?php echo $this->lang->line('information'); ?></h4>
               <ul class="list-group">
-                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:lightgray;display:inline;"></div> ไม่สามารถจองได้</li>
-                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:#3788d8;display:inline;"></div> เหตุการณ์จองของคุณ</li>
-                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:indianred;display:inline;"></div> เหตุการณ์จองที่มีข้อผิดพลาดเกิดขึ้น</li>
-                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:goldenrod;display:inline;"></div> เหตุการณ์จองที่มีการแก้ไขหลังเกิดข้อผิดพลาด</li>
+                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:lightgray;display:inline;"></div> <?php echo $this->lang->line('event_book_failed'); ?></li>
+                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:#3788d8;display:inline;"></div> <?php echo $this->lang->line('event_book_available'); ?></li>
+                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:indianred;display:inline;"></div> <?php echo $this->lang->line('event_book_error'); ?></li>
+                <li class="list-group-item"><div style="padding:5px;margin:5px;background-color:goldenrod;display:inline;"></div> <?php echo $this->lang->line('event_book_edit'); ?></li>
               </ul>
             </div>
           </div>
@@ -68,10 +107,7 @@
           <div class="my-3 justify-content-center">
             <button type="button" id="rentConfirm" class="btn btn-primary">จองใช้เครื่องมือ</button>
           </div>
-          <?php elseif($instruments['ins_maintenance'] == 1 && $instruments['ins_inactive'] == 0) : ?>
-            <div class="col-lg-12 text-center">
-              <h2 class="text-warning">เครื่องมือวิจัยนี้อยู่ในระหว่างบำรุงรักษา</h2>
-            </div>
+
           <?php endif; ?>
       </div>
     </div>
@@ -106,11 +142,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // initialize the calendar
   // -----------------------------------------------------------------
+  const lang = "<?php echo $this->session->userdata('site_lang'); ?>";
 
   var calendar = new Calendar(calendarEl, {
     plugins: [ 'interaction', 'dayGrid' ],
     timeZone: 'Asia/Bangkok',
-    locale: 'th',
+    locale: lang == 'thai' ? 'th' : 'en',
     editable: true,
     droppable: true,
     eventOverlap: false,
@@ -167,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ins_id: <?php echo $instruments['ins_id']; ?>
       },
       failure: function() {
-        alert('เกิดข้อผิดพลาดในขณะที่ดึงข้อมูล!');
+        alert('Error!');
       },
       color: 'lightgray',   // a non-ajax option
     },
@@ -268,33 +305,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   });
 });
-/*
-function selectEvent(selectionInfo) {
-
-  let currentDate = new Date();
-  let startDate = document.getElementById('startDate');
-  let endDate = document.getElementById('endDate');
-
-  console.log(selectionInfo);
-
-  if (new Date(selectionInfo.startStr) >= currentDate && new Date(selectionInfo.endStr) >= currentDate) {
-    startDate.valueAsDate = new Date(selectionInfo.startStr);
-    endDate.valueAsDate = new Date(selectionInfo.endStr);
-  }
-  else {
-    Swal.fire({
-      icon: 'error',
-      title: 'ตรวจสอบข้อผิดพลาด',
-      text: 'ระยะเวลาต้องเป็นวันที่ล่วงหน้าอย่างน้อย 1 วัน!'
-    })
-  }
-}*/
-
-    /*
-    // แสดงวันที่ตาม format thai
-    const event = new Date(currentDate.getTime() + 86400000);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    event.toLocaleDateString('th-TH', options)*/
 
 </script>
 

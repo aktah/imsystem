@@ -1,5 +1,3 @@
-<!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">เพิ่มเครื่องมือ</h1>
 
 <?php echo form_open_multipart('instruments/add', array('id' => 'formInstrument'));?>
 
@@ -10,7 +8,7 @@
 
 <div class="card shadow mb-4">
   <div class="card-header py-3 d-flex align-items-center justify-content-between">
-    <h6 class="m-0 font-weight-bold text-primary">รายละเอียดเครื่องมือวิจัย</h6>
+    <h6 class="m-0 font-weight-bold text-primary"><?php echo $this->lang->line('instrument'); ?></h6>
   </div>
   <div class="card-body">
 
@@ -31,7 +29,15 @@
         <div class="form-group row">
             <div class="col-lg">
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right"><b>ชื่อ: <span class="text-danger">*</span></b></label>
+                  <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('device_code'); ?>: <span class="text-danger">*</span></b></label>
+                  <div class="col-sm-10">
+                      <div class="form-group">
+                          <input type="text" class="form-control form-control-sm" name="device" value="<?php echo $this->input->post("device"); ?>">
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('name'); ?> (TH): <span class="text-danger">*</span></b></label>
                   <div class="col-sm-10">
                       <div class="form-group">
                           <input type="text" class="form-control form-control-sm" name="name" value="<?php echo $this->input->post("name"); ?>">
@@ -39,7 +45,31 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right"><b>รายละเอียด: <span class="text-danger">*</span></b></label>
+                  <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('name'); ?> (EN): <span class="text-danger">*</span></b></label>
+                  <div class="col-sm-10">
+                      <div class="form-group">
+                          <input type="text" class="form-control form-control-sm" name="name_en" value="<?php echo $this->input->post("name_en"); ?>">
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('abbreviation'); ?>:</b></label>
+                  <div class="col-sm-10">
+                      <div class="form-group">
+                          <input type="text" class="form-control form-control-sm" name="abbre" value="<?php echo $this->input->post("abbre"); ?>">
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('model'); ?>:</b></label>
+                  <div class="col-sm-10">
+                      <div class="form-group">
+                          <input type="text" class="form-control form-control-sm" name="model" value="<?php echo $this->input->post("model"); ?>">
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label text-md-right"><b><?php echo $this->lang->line('description'); ?>:</b></label>
                   <div class="col-sm-10">
                     <div class="form-group">
                       <textarea class="form-control" name="details"><?php echo $this->input->post("details"); ?></textarea>
@@ -47,23 +77,23 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right">สถานที่จัดเก็บ:</label>
+                  <label class="col-sm-2 col-form-label text-md-right"><?php echo $this->lang->line('warehouse'); ?>:</label>
                   <div class="col-sm-10">
                     <select id="storagePick" class="form-control form-control-sm" name="instrument_storage">
-                    <option value='0'>— เลือกสถานที่จัดเก็บ —</option>
+                    <option value='0'>— <?php echo $this->lang->line('select_storage'); ?> —</option>
                     <?php foreach($this->storage_model->storageList() as $storage) : ?>
                     <option value='<?php echo $storage["storage_id"]; ?>'><?php echo $storage["storage_name"]; ?></option>
                     <?php endforeach; ?>
-                    <option value='-1'>— เพิ่มใหม่ —</option>
+                    <option value='-1'>— <?php echo $this->lang->line('addnew'); ?> —</option>
                     </select>
                   </div>
                 </div>
 
 
                 <div class="form-group row">
-                  <label class="col-sm-2 col-form-label text-md-right">ผู้ดูแล:</label>
+                  <label class="col-sm-2 col-form-label text-md-right"><?php echo $this->lang->line('mod'); ?>:</label>
                   <div class="col-sm-10">
-                  <div class="col-lg-12">ผู้ดูแลเครื่องมือวิจัยนี้</div>
+                  <div class="col-lg-12"><?php echo $this->lang->line('instrument_manage_mod_info'); ?></div>
                   <div class="col-lg-3">
                   <ul id="staff" style="list-style-type:none;">
                   </ul> 
@@ -71,7 +101,7 @@
                   <hr>
                   <div class="form-inline">
                   <select class="form-control form-control-sm mr-2" id="instrument_attendant">
-                    <option value='0'>— เลือกผู้ดูแล —</option>
+                    <option value='0'>— <?php echo $this->lang->line('choose_mod_for_instrument'); ?> —</option>
                     <?php foreach($this->user_model->list() as $member) : ?>
 
                       <?php if ($this->auth_model->hasFlags($this->auth_model->getMemberRole($member["member_name"]), USER_ROLES['MOD'])) : ?> <!-- ผู้ใช้ต้องมีบทบาทเป็นผู้ดูแลเครื่องมือเท่านั้น -->
@@ -80,7 +110,7 @@
                     <?php endforeach; ?>
                   </select>
                   <div class="form-group">
-                    <button type="button" class="btn btn-primary btn-sm" id="addStaff">เพิ่ม</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="addStaff"><?php echo $this->lang->line('add'); ?></button>
                   </div>
                   </div>
                   </div>
@@ -93,18 +123,18 @@
         <div class="form-group">
           <div class="col-lg-12">
               <div class="form-group row" style="border-bottom: 1px dotted #777;">
-                  <h4>สถานะและตั้งค่า</h4>
+                  <h4><?php echo $this->lang->line('options_and_settings'); ?></h4>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="status" name="status" <?php echo $this->input->post("status") ? ("checked") : (""); ?>>
                 <label class="form-check-label" for="status">
-                  เปิดใช้งาน
+                  <?php echo $this->lang->line('active'); ?>
                 </label>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="unactive" name="unactive" <?php echo $this->input->post("unactive") ? ("checked") : (""); ?>>
                 <label class="form-check-label" for="unactive">
-                  ปิดการใช้งาน
+                <?php echo $this->lang->line('inactive'); ?>
                 </label>
               </div>
           </div>
@@ -116,9 +146,9 @@
         <div class="col-lg-12">
               <div class="form-group text-center">
                 <div class="mmn-dropzones">
-                  วางไฟล์รูปภาพที่นี่เพื่ออัปโหลด
+                  <?php echo $this->lang->line('drag_and_drop_images'); ?>
                 </div>
-                <small>เพิ่มเติม: คลิกที่รูปภาพเพื่อลบขั้นตอนนี้ไม่สามารถย้อนกลับได้</small>
+                <small><?php echo $this->lang->line('drag_and_drop_image_info'); ?></small>
                 <!-- Progress Bar -->
                 <div class="progress bg-light mmn-progress">
                   <div class="progress-bar bg-success mmn-progress-bar" role="progressbar" style="width:0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
@@ -142,7 +172,7 @@
 
 <div class="form-group row">
     <div class="col-lg-12">
-        <div class="text-center"><button id="saveIntrument" type="submit" class="btn btn-outline-secondary mb-2 mr-sm-2">บันทึก</button> <button type="reset" class="btn btn-outline-secondary mb-2 mr-sm-2">รีเซ็ต</button> <button type="submit" name="cancel" class="btn btn-outline-secondary mb-2 mr-sm-2">ยกเลิก</button></div>
+        <div class="text-center"><button id="saveIntrument" type="submit" class="btn btn-outline-secondary mb-2 mr-sm-2"><?php echo $this->lang->line('create'); ?></button> <button type="reset" class="btn btn-outline-secondary mb-2 mr-sm-2"><?php echo $this->lang->line('reset'); ?></button> <button type="submit" name="cancel" class="btn btn-outline-secondary mb-2 mr-sm-2"><?php echo $this->lang->line('cancel'); ?></button></div>
     </div>
 </div>
 </form>
@@ -154,7 +184,7 @@
     <div class="modal-content">
       
         <div class="modal-header">
-          <h2 class="modal-title">เพิ่มสถานที่จัดเก็บใหม่</h2>
+          <h2 class="modal-title"><?php echo $this->lang->line('warehouse'); ?></h2>
           <button type="button" class="close close-modal" aria-label="Close" (click)="modal.dismiss()">
               <i class="fa fa-window-close-o" aria-hidden="true"></i>
           </button>
@@ -166,16 +196,16 @@
           <input type="hidden" class='form-control' name="url" value="<?php echo base_url(); ?>"/>     
                    
           <div class="form-group">
-            <input type="text" class='form-control' name="storage_name" placeholder="ชื่อสถานที่" /> 
+            <input type="text" class='form-control' name="storage_name" placeholder="<?php echo $this->lang->line('name'); ?>" /> 
           </div>
 
         </div>
         <div class="modal-footer" style="display: block;">
           <div>
-              <button type="reset" class="btn btn-outline-secondary mr-2">รีเซ็ต</button>
-              <button type="button" class="btn btn-outline-secondary close-modal" (click)="modal.dismiss()">ยกเลิก</button>
+              <button type="reset" class="btn btn-outline-secondary mr-2"><?php echo $this->lang->line('reset'); ?></button>
+              <button type="button" class="btn btn-outline-secondary close-modal" (click)="modal.dismiss()"><?php echo $this->lang->line('cancel'); ?></button>
               <div class="float-right">
-                  <button type="submit" class="btn text-white btn-secondary btn-outline-dark" ngbAutofocus>สร้าง</button>
+                  <button type="submit" class="btn text-white btn-secondary btn-outline-dark" ngbAutofocus><?php echo $this->lang->line('addnew'); ?></button>
               </div>
           </div>
         </div>

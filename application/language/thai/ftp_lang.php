@@ -37,19 +37,15 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$lang['upload_userfile_not_set'] = 'Unable to find a post variable called userfile.';
-$lang['upload_file_exceeds_limit'] = 'The uploaded file exceeds the maximum allowed size in your PHP configuration file.';
-$lang['upload_file_exceeds_form_limit'] = 'The uploaded file exceeds the maximum size allowed by the submission form.';
-$lang['upload_file_partial'] = 'The file was only partially uploaded.';
-$lang['upload_no_temp_directory'] = 'The temporary folder is missing.';
-$lang['upload_unable_to_write_file'] = 'The file could not be written to disk.';
-$lang['upload_stopped_by_extension'] = 'The file upload was stopped by extension.';
-$lang['upload_no_file_selected'] = 'You did not select a file to upload.';
-$lang['upload_invalid_filetype'] = 'The filetype you are attempting to upload is not allowed.';
-$lang['upload_invalid_filesize'] = 'The file you are attempting to upload is larger than the permitted size.';
-$lang['upload_invalid_dimensions'] = 'The image you are attempting to upload doesn\'t fit into the allowed dimensions.';
-$lang['upload_destination_error'] = 'A problem was encountered while attempting to move the uploaded file to the final destination.';
-$lang['upload_no_filepath'] = 'The upload path does not appear to be valid.';
-$lang['upload_no_file_types'] = 'You have not specified any allowed file types.';
-$lang['upload_bad_filename'] = 'The file name you submitted already exists on the server.';
-$lang['upload_not_writable'] = 'The upload destination folder does not appear to be writable.';
+$lang['ftp_no_connection']		= 'Unable to locate a valid connection ID. Please make sure you are connected before performing any file routines.';
+$lang['ftp_unable_to_connect']		= 'Unable to connect to your FTP server using the supplied hostname.';
+$lang['ftp_unable_to_login']		= 'Unable to login to your FTP server. Please check your username and password.';
+$lang['ftp_unable_to_mkdir']		= 'Unable to create the directory you have specified.';
+$lang['ftp_unable_to_changedir']	= 'Unable to change directories.';
+$lang['ftp_unable_to_chmod']		= 'Unable to set file permissions. Please check your path.';
+$lang['ftp_unable_to_upload']		= 'Unable to upload the specified file. Please check your path.';
+$lang['ftp_unable_to_download']		= 'Unable to download the specified file. Please check your path.';
+$lang['ftp_no_source_file']		= 'Unable to locate the source file. Please check your path.';
+$lang['ftp_unable_to_rename']		= 'Unable to rename the file.';
+$lang['ftp_unable_to_delete']		= 'Unable to delete the file.';
+$lang['ftp_unable_to_move']		= 'Unable to move the file. Please make sure the destination directory exists.';

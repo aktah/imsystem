@@ -21,6 +21,10 @@
 			}
 		}
 
+		public function getState() {
+			echo json_encode($this->session->userdata('sideToggle'));
+		}
+
 		public function index() {
 			if (!$this->auth_model->hasFlags($this->auth_model->getMemberRoleByID($this->session->userdata('member_id')), USER_ROLES['MOD'] | USER_ROLES['ADMIN'])) {
 				redirect("imsystem");
@@ -82,19 +86,20 @@
 
 		public function update() {	
 
-			$this->form_validation->set_rules('name', 'ชื่อเครื่องมือวิจัย', 'required');
-			$this->form_validation->set_rules('details', 'รายละเอียด', 'required');
+			$this->form_validation->set_rules('device', $this->lang->line('device_code'), 'required');
+			$this->form_validation->set_rules('name', $this->lang->line('name') . " (TH)", 'required');
+			$this->form_validation->set_rules('name_en', $this->lang->line('name') . " (EN)", 'required');
 
 			if($this->form_validation->run() === FALSE){
 				$this->view($this->input->post('id'));
 			} else {
 				if ($this->instrument_model->instrument_update()) {
-					$this->session->set_flashdata('message', "อัปเดตข้อมูลเครื่องมือเรียบร้อยแล้ว!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_update_success'));
 					$this->session->set_flashdata('type', "success");
 					redirect("instruments");
 				}
 				else {
-					$this->session->set_flashdata('message', "เกิดข้อผิดพลาดในการอัปเดตข้อมูลเครื่องมือ!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_update_fail'));
 					redirect("instruments");
 				}
 			}
@@ -162,8 +167,9 @@
 			}
 			$this->load->model("storage_model");
 
-			$this->form_validation->set_rules('name', 'ชื่อเครื่องมือวิจัย', 'required');
-			$this->form_validation->set_rules('details', 'รายละเอียด', 'required');
+			$this->form_validation->set_rules('device', $this->lang->line('device_code'), 'required');
+			$this->form_validation->set_rules('name', $this->lang->line('name') . " (TH)", 'required');
+			$this->form_validation->set_rules('name_en', $this->lang->line('name') . " (EN)", 'required');
 
 			if($this->form_validation->run() === FALSE){
 				$this->load->view('templates/header');
@@ -171,12 +177,12 @@
 				$this->load->view('templates/footer');
 			} else {
 				if ($this->instrument_model->instrument_add()) {
-					$this->session->set_flashdata('message', "เพิ่มข้อมูลเครื่องมือวิจัยเรียบร้อยแล้ว!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_add_success'));
 					$this->session->set_flashdata('type', "success");
 					redirect("instruments");
 				}
 				else {
-					$this->session->set_flashdata('message', "เกิดข้อผิดพลาดในการเพิ่มข้อมูลเครื่องมือวิจัย!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_add_fail'));
 					redirect("instruments");
 				}
 			}

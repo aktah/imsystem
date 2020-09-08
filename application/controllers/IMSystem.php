@@ -4,7 +4,7 @@
 		public function __construct(){
 			parent::__construct();
 			$this->load->model('authCookie_model');
-			if(!$this->authCookie_model->isLoggedIn() && $this->uri->segment(2) != 'login' && $this->uri->segment(2) != 'frmLogin') {
+			if(!$this->authCookie_model->isLoggedIn() && $this->uri->segment(2) != 'login' && $this->uri->segment(2) != 'frmLogin' && $this->uri->segment(2) != 'register' && $this->uri->segment(2) != 'frmRegister' && $this->uri->segment(2) != 'switchLang') {
 				redirect('imsystem/login');
 			}
 
@@ -16,9 +16,6 @@
 		public function index() {
 			$data['user'] = $this->user_model->details($this->session->userdata('member_id'));
 
-			$this->load->model("booking_model");
-			$data['rent'] = $this->booking_model->getData(NULL, $this->session->userdata('member_id'), -1)->result_array();
-
 			$this->load->view('templates/header');
 			$this->load->view('pages/index', $data);
 			$this->load->view('templates/footer');
@@ -26,8 +23,8 @@
 		
 		public function updateProfile() {	
 
-			$this->form_validation->set_rules('fullname', 'ชื่อ-นามสกุล', 'required');
-			$this->form_validation->set_rules('email', 'ที่อยู่อีเมล', 'required');
+			$this->form_validation->set_rules('fullname', $this->lang->line('full_name'), 'required');
+			$this->form_validation->set_rules('email', $this->lang->line('email_address'), 'required');
 
 			if($this->form_validation->run() === FALSE){
 
@@ -38,12 +35,12 @@
 				$this->load->view('templates/footer');
 			} else {
 				if ($this->user_model->member_update()) {
-					$this->session->set_flashdata('message', "อัปเดตข้อมูลสมาชิกเรียบร้อยแล้ว!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_update_success'));
 					$this->session->set_flashdata('type', "success");
 					redirect("imsystem");
 				}
 				else {
-					$this->session->set_flashdata('message', "รหัสผ่านไม่ตรงกัน!");
+					$this->session->set_flashdata('message', $this->lang->line('password_not_match'));
 					$this->session->set_flashdata('type', "danger");
 					redirect("imsystem");
 				}
@@ -75,6 +72,11 @@
 			}
 		}
 
+		public function switchLang($language = "") {
+			$this->session->set_userdata('site_lang', $language);
+			redirect('imsystem');
+		}
+
 		public function login() {
 			if ($this->authCookie_model->isLoggedIn()) {
                 redirect('imsystem');
@@ -99,12 +101,12 @@
                 redirect('imsystem');
 			}
 			
-			$this->form_validation->set_rules('username', 'ชื่อผู้ใช้', 'required');
-			$this->form_validation->set_rules('password', 'รหัสผ่าน', 'required');
+			$this->form_validation->set_rules('username', $this->lang->line('username'), 'required');
+			$this->form_validation->set_rules('password', $this->lang->line('password'), 'required');
 
 			if($this->form_validation->run() === FALSE){
 				$this->load->view('templates/auth/header');
-				$this->load->view('pages/register');
+				$this->load->view('pages/login');
 				$this->load->view('templates/auth/footer');
 			} else {
 				$isAuthenticated = false;
@@ -120,7 +122,10 @@
 				if ($isAuthenticated) {
 
 					$this->session->set_userdata(array("member_id" => $user["member_id"]));
-
+					
+					if (!$this->session->userdata('site_lang'))
+						$this->session->set_userdata('site_lang',  "thai");
+					
 					if ($user['member_changepass'] != 0) {
 						$this->session->set_userdata(array("changepwd" => true));
 						redirect('users/changepass');
@@ -157,7 +162,7 @@
 
 					redirect();
 				} else {
-					$this->session->set_flashdata('message', "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!");
+					$this->session->set_flashdata('message', $this->lang->line('invalid_login'));
 					$this->session->set_flashdata('type', "danger");
 					redirect("imsystem/login");
 				}
@@ -170,9 +175,9 @@
                 redirect('imsystem');
 			}
 			
-			$this->form_validation->set_rules('username', 'ชื่อผู้ใช้', 'required|is_unique[members.member_name]|regex_match[/^[a-zA-Z0-9_]{4,}/]');
-			$this->form_validation->set_rules('email', 'ที่อยู่อีเมล', 'required|is_unique[members.member_email]');
-			$this->form_validation->set_rules('password', 'รหัสผ่าน', 'required');
+			$this->form_validation->set_rules('username', $this->lang->line('username'), 'required|is_unique[members.member_name]|regex_match[/^[a-zA-Z0-9_]{4,}/]');
+			$this->form_validation->set_rules('email', $this->lang->line('email_address'), 'required|is_unique[members.member_email]');
+			$this->form_validation->set_rules('password', $this->lang->line('password'), 'required');
 
 			if($this->form_validation->run() === FALSE){
 				$this->load->view('templates/auth/header');
@@ -180,12 +185,12 @@
 				$this->load->view('templates/auth/footer');
 			} else {
 				if ($this->auth_model->member_register($this->input->post('email'), $this->input->post('username'), $this->input->post('password'))) {
-					$this->session->set_flashdata('message', "สมัครสมาชิกเสร็จสมบูรณ์แล้ว!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_process_success'));
 					$this->session->set_flashdata('type', "success");
 					redirect("imsystem/login");
 				}
 				else {
-					$this->session->set_flashdata('message', "ตรวจพบข้อผิดพลาดในการสมัครสมาชิก โปรดติดต่อผู้ดูแลระบบ!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_process_fail'));
 					redirect("imsystem/register");
 				}
 			}

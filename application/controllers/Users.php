@@ -27,17 +27,36 @@
 			$this->load->view('templates/footer');
 		}
 
-		public function changepassword() {
-			
-			$this->form_validation->set_rules('password', 'รหัสผ่าน', 'required');
-			$this->form_validation->set_rules('confpassword', 'ยืนยันรหัสผ่าน', 'required');
+		public function job() {
 
+			$this->load->model("booking_model");
+			$data['user'] = $this->user_model->details($this->session->userdata('member_id'));
+			$data['rent'] = $this->booking_model->getData(NULL, $this->session->userdata('member_id'), -1)->result_array();
+
+			$this->load->view('templates/header');
+			$this->load->view('pages/job', $data);
+			$this->load->view('templates/footer');
+		}
+
+		public function settingsupdate() {
+			
+			$this->form_validation->set_rules('password', $this->lang->line('password'), 'required');
+			$this->form_validation->set_rules('confpassword', $this->lang->line('confirmpassword'), 'required');
+
+			if ($this->input->post('settings') !== NULL) {
+				$this->form_validation->set_rules('oldpassword', $this->lang->line('oldpassword'), 'required');
+			}
+			
 			if($this->form_validation->run() === FALSE){
 
 				$data['user'] = $this->user_model->details($this->session->userdata('member_id'));
 
 				$this->load->view('templates/header');
-				$this->load->view('users/changepass', $data);
+				if ($this->input->post('settings') !== NULL) {
+					$this->load->view('users/settings', $data);
+				} else if ($this->input->post('changepass') !== NULL) {
+					$this->load->view('users/changepass', $data);
+				}
 				$this->load->view('templates/footer');
 
 			} else {
@@ -45,15 +64,20 @@
 
 					$this->session->unset_userdata('changepwd');
 
-					$this->session->set_flashdata('message', "อัปเดตข้อมูลสมาชิกเรียบร้อยแล้ว!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_update_success'));
 					$this->session->set_flashdata('type', "success");
 					
-					redirect("users");
+					redirect("imsystem");
 				}
 				else {
-					$this->session->set_flashdata('message', "รหัสผ่านไม่ตรงกัน!");
+					$this->session->set_flashdata('message', $this->lang->line('password_not_match'));
 					$this->session->set_flashdata('type', "danger");
-					redirect("users/changepass");
+					
+					if ($this->input->post('settings') !== NULL) {
+						redirect("users/settings");
+					} elseif ($this->input->post('changepass') !== NULL) {
+						redirect("users/changepass");
+					}
 				}
 			}
 		}
@@ -67,6 +91,14 @@
 
 			$this->load->view('templates/header');
 			$this->load->view('users/changepass', $data);
+			$this->load->view('templates/footer');
+		}
+
+		public function settings() {
+			$data['user'] = $this->user_model->details($this->session->userdata('member_id'));
+			
+			$this->load->view('templates/header');
+			$this->load->view('users/settings', $data);
 			$this->load->view('templates/footer');
 		}
 
@@ -102,11 +134,14 @@
 		}
 
 		public function add() {	
-			// print_r($this->input->post(null));
 
-			$this->form_validation->set_rules('username', 'ชื่อผู้ใช้', 'required|is_unique[members.member_name]|regex_match[/^[a-zA-Z0-9_]{4,}/]');
-			$this->form_validation->set_rules('email', 'ที่อยู่อีเมล', 'required|is_unique[members.member_email]');
-			$this->form_validation->set_rules('password', 'รหัสผ่าน', 'required');
+			if ($this->input->post('cancel') !== NULL) {
+				redirect("users");
+			}
+
+			$this->form_validation->set_rules('username', $this->lang->line('username'), 'required|is_unique[members.member_name]|regex_match[/^[a-zA-Z0-9_]{4,}/]');
+			$this->form_validation->set_rules('email', $this->lang->line('email_address'), 'required|is_unique[members.member_email]');
+			$this->form_validation->set_rules('password', $this->lang->line('password'), 'required');
 
 			if($this->form_validation->run() === FALSE){
 				$this->load->view('templates/header');
@@ -114,22 +149,25 @@
 				$this->load->view('templates/footer');
 			} else {
 				if ($this->user_model->member_add()) {
-					$this->session->set_flashdata('message', "เพิ่มข้อมูลสมาชิกเรียบร้อยแล้ว!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_add_success'));
 					$this->session->set_flashdata('type', "success");
 					redirect("users");
 				}
 				else {
-					$this->session->set_flashdata('message', "เกิดข้อผิดพลาดในการเพิ่มข้อมูลสมาชิก!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_add_fail'));
 					redirect("users");
 				}
 			}
 		}
 
-		public function update() {	
-			// print_r($this->input->post(null));
+		public function update() {
 
-			$this->form_validation->set_rules('username', 'ชื่อผู้ใช้', 'required|regex_match[/^[a-zA-Z0-9_]{4,}/]');
-			$this->form_validation->set_rules('email', 'ที่อยู่อีเมล', 'required');
+			if ($this->input->post('cancel') !== NULL) {
+				redirect("users");
+			}
+
+			$this->form_validation->set_rules('username', $this->lang->line('username'), 'required|regex_match[/^[a-zA-Z0-9_]{4,}/]');
+			$this->form_validation->set_rules('email', $this->lang->line('email_address'), 'required');
 
 			if($this->form_validation->run() === FALSE){
 
@@ -141,12 +179,12 @@
 				
 			} else {
 				if ($this->user_model->member_update()) {
-					$this->session->set_flashdata('message', "อัปเดตข้อมูลสมาชิกเรียบร้อยแล้ว!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_update_success'));
 					$this->session->set_flashdata('type', "success");
 					redirect("users");
 				}
 				else {
-					$this->session->set_flashdata('message', "เกิดข้อผิดพลาดในการอัปเดตข้อมูลสมาชิก!");
+					$this->session->set_flashdata('message', $this->lang->line('alert_update_fail'));
 					redirect("users");
 				}
 			}

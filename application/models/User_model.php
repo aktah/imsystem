@@ -56,6 +56,16 @@
                 return false;
             }
 
+            if ($this->input->post('settings') !== NULL) {
+                // Check pass
+				$password = $this->input->post('oldpassword');
+				
+				$user = $this->auth_model->getMemberByID($this->input->post('id'));
+				if (!password_verify($password, $user["member_password"])) {
+					return false;
+				}
+            }
+
             $hashed_password = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
             $now = date("Y-m-d H:i:s");
 

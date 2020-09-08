@@ -29,15 +29,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">คุณแน่ใจหรือว่าต้องการออกจากระบบ?</h5>
+          <h5 class="modal-title" id="exampleModalLabel"><?php echo $this->lang->line('logout_model_title') ?></h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">เลือก "ออกจากระบบ" ด้านล่างหากคุณพร้อมที่จะจบเซสชั่นในปัจจุบันของคุณ</div>
+        <div class="modal-body"><?php echo $this->lang->line('logout_model_body') ?></div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
-          <a class="btn btn-primary" href="<?php echo base_url();?>imsystem/logout">ออกจากระบบ</a>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal"><?php echo $this->lang->line('cancel') ?></button>
+          <a class="btn btn-primary" href="<?php echo base_url();?>imsystem/logout"><?php echo $this->lang->line('logout'); ?></a>
         </div>
       </div>
     </div>
